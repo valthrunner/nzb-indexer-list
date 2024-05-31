@@ -4,23 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NZB sources</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            cursor: pointer;
+        }
+
+        th:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
 </head>
 <body>
-#NZB sources
-Extensive Usenet Indexer Table with registration status, membership types, API hits, download hits, membership duration, membership prices and payment methods. <br><br>
-(The tables may not be fully visible because of the amount of columns.<br>
-By clicking on a table you will be able to move the table left and right by using the arrow keys <kbd>←</kbd>, <kbd>→</kbd>.)
+<h1>NZB sources</h1>
+    <p>! ! ! For now this site only lists Usenet Indexers. However, forums and other websites will be added in the future. ! ! !</p>
+    <p>Extensive Usenet Indexer Table with registration status, membership types, API hits, download hits, membership duration, membership prices and payment methods.</p>
+    <p>(The tables may not be fully visible because of the amount of columns.<br>
+    By clicking on a table you will be able to move the table left and right by using the arrow keys <kbd>←</kbd>, <kbd>→</kbd>.)</p>
 
-## Table of content:
-[Moderated Indexers](#moderated-indexers)
-[Public Indexers](#public-indexers)
-[Spotweb Indexers](#spotweb-indexers)
+    <h2>Table of content:</h2>
+    <ul>
+        <li><a href="#moderated-indexers">Moderated Indexers</a></li>
+        <li><a href="#public-indexers">Public Indexers</a></li>
+        <li><a href="#spotweb-indexers">Spotweb Indexers</a></li>
+    </ul>
 
-    
-## Moderated Indexers
-Best kind of indexer. They offer API access, which makes automation with tools like Sonarr, and Radarr possible and NZBs can be directly sent to your download manager. They index obfuscated NZBs with release names and passwords.
-
+    <h3 id="moderated-indexers">Moderated Indexers</h3>
+    <p>Best kind of indexer. They offer API access, which makes automation with tools like Sonarr, and Radarr possible and NZBs can be directly sent to your download manager. They index obfuscated NZBs with release names and passwords.</p>
     <table id="table-1">
     <thead>
         <tr>
@@ -1001,9 +1021,8 @@ Best kind of indexer. They offer API access, which makes automation with tools l
 </table>
 
     
-## Public Indexers <br>
-They index automatically from Usenet groups. They only have mostly obfuscated headers and the NZBs never come with a password.
-    
+    <h3 id="public-indexers">Public Indexers</h3>
+    <p>They index automatically from Usenet groups. They only have mostly obfuscated headers and the NZBs never come with a password.</p>
 <table id="table-2">
   <thead>
     <tr>
@@ -1126,10 +1145,9 @@ They index automatically from Usenet groups. They only have mostly obfuscated he
     </tr>
 </table>
 
-## Spotweb Indexers <br>
-Great for Dutch and Flemish content, but also a lot of English content.
-
-<table id="table-3">
+    <h3 id="spotweb-indexers">Spotweb Indexers</h3>
+    <p>Great for Dutch and Flemish content, but also a lot of English content.</p>
+    <table id="table-3">
  <thead>
      <tr>
           <th>Indexer</th>
@@ -1209,10 +1227,10 @@ Great for Dutch and Flemish content, but also a lot of English content.
      </tr>
 </table>
 
-*if you know, you know. If you don't, please don't ask.
+    <p>*if you know, you know. If you don't, please don't ask.</p>
+    <p>Thx to Just2it & sbestran</p>
 
-Thx to Just2it & sbestran
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             new Tablesort(document.getElementById('table-1'));
@@ -1220,6 +1238,5 @@ Thx to Just2it & sbestran
             new Tablesort(document.getElementById('table-3'));
         });
     </script>
-
 </body>
 </html>
