@@ -132,6 +132,9 @@
         <p><a href="#public-indexers"><strong>Public Indexers</strong></a></p>
         <p><a href="#spotweb-indexers"><strong>Spotweb Indexers</strong></a></p>
 <hr>
+
+        <button onclick="sortTable('table-1', 0)">Sort Table 1 by First Column</button>
+    
         <h3 id="moderated-indexers">Moderated Indexers</h3>
     <p>Best kind of indexer. They offer API access, which makes automation with tools like Sonarr, and Radarr possible and NZBs can be directly sent to your download manager. They index obfuscated NZBs with release names and passwords.</p>
     <table id="table-1">
@@ -150,7 +153,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr>
+        <tr data-group="1">
             <td><strong>altHUB co za</strong></td>
             <td>Open</td>
             <td>Trial</td>
@@ -162,7 +165,7 @@
             <td>XMR BTC</td>
             <td>EN</td>
         </tr>
-        <tr>
+        <tr data-group="1">
             <td></td>
             <td></td>
             <td>Free</td>
@@ -174,7 +177,7 @@
             <td>LTC BCH</td>
             <td></td>
         </tr>
-        <tr>
+        <tr data-group="1">
             <td></td>
             <td></td>
             <td>Premium</td>
@@ -186,7 +189,7 @@
             <td>ETH RVN</td>
             <td></td>
         </tr>
-        <tr>
+        <tr data-group="1">
             <td></td>
             <td></td>
             <td>Lifetime</td>
@@ -198,7 +201,7 @@
             <td>ZEC etc</td>
             <td></td>
         </tr>
-        <tr>
+        <tr data-group="2">
             <td><strong>abnzb com</strong></td>
             <td>Open</td>
             <td>Free ("User")</td>
@@ -210,7 +213,7 @@
             <td>XMR BCH</td>
             <td>EN</td>
         </tr>
-        <tr>
+        <tr data-group="2">
             <td></td>
             <td></td>
             <td>Legacy User</td>
@@ -222,7 +225,7 @@
             <td>ZEC BTC</td>
             <td></td>
         </tr>
-        <tr>
+        <tr data-group="2">
             <td></td>
             <td></td>
             <td>Supporter</td>
@@ -234,7 +237,7 @@
             <td>LTC etc</td>
             <td></td>
         </tr>
-        <tr>
+        <tr data-group="2">
             <td></td>
             <td></td>
             <td>VIP</td>
@@ -246,7 +249,7 @@
             <td></td>
             <td></td>
         </tr>
-        <tr>
+        <tr data-group="3">
             <td><strong>digitalcarnage info</strong></td>
             <td>Donate only / open</td>
             <td>Free</td>
@@ -258,7 +261,7 @@
             <td>XMR BCH</td>
             <td>EN</td>
         </tr>
-        <tr>
+        <trr data-group="3">
             <td></td>
             <td></td>
             <td>Basic</td>
@@ -270,7 +273,7 @@
             <td>BTC LTC</td>
             <td></td>
         </tr>
-        <tr>
+        <trr data-group="3">
             <td></td>
             <td></td>
             <td>Vip</td>
@@ -282,7 +285,7 @@
             <td>ETH</td>
             <td></td>
         </tr>
-        <tr>
+        <trr data-group="3">
             <td></td>
             <td></td>
             <td>Ultra</td>
@@ -294,7 +297,7 @@
             <td>USDT</td>
             <td></td>
         </tr>
-        <tr>
+        <trr data-group="4">
             <td><strong>dognzb cr</strong></td>
             <td>Invite (down often)</td>
             <td>Trial</td>
@@ -306,7 +309,7 @@
             <td>BTC DOGE</td>
             <td>EN</td>
         </tr>
-        <tr>
+        <tr data-group="4">
             <td></td>
             <td></td>
             <td>Lite</td>
@@ -318,7 +321,7 @@
             <td></td>
             <td></td>
         </tr>
-        <tr>
+        <tr data-group="4">
             <td></td>
             <td></td>
             <td>VIP</td>
@@ -330,7 +333,7 @@
             <td></td>
             <td></td>
         </tr>
-        <tr>
+        <tr data-group="5">
             <td><strong>DrunkenSlug com</strong></td>
             <td>Invite</td>
             <td>Water (Free)</td>
@@ -342,7 +345,7 @@
             <td>BTC</td>
             <td>EN</td>
         </tr>
-        <tr>
+        <tr data-group="5">
             <td></td>
             <td></td>
             <td>Ale</td>
@@ -354,7 +357,7 @@
             <td>AltCoins</td>
             <td></td>
         </tr>
-        <tr>
+        <tr data-group="5">
             <td></td>
             <td></td>
             <td>Wine</td>
@@ -366,7 +369,7 @@
             <td>(with additional fees)</td>
             <td></td>
         </tr>
-        <tr>
+        <tr data-group="6">
             <td><strong>GingaDADDY com</strong></td>
             <td>Open</td>
             <td>Member</td>
@@ -378,7 +381,7 @@
             <td>None</td>
             <td>EN</td>
         </tr>
-        <tr>
+        <tr data-group="6">
             <td></td>
             <td></td>
             <td>VIP</td>
@@ -390,7 +393,7 @@
             <td></td>
             <td></td>
         </tr>
-        <tr>
+        <tr data-group="6">
             <td></td>
             <td></td>
             <td>VIP Supporter</td>
@@ -402,7 +405,7 @@
             <td></td>
             <td></td>
         </tr>
-        <tr>
+        <tr data-group="7">
             <td><strong>headphones codeshy com</strong></td>
             <td>Open</td>
             <td>?</td>
@@ -414,7 +417,7 @@
             <td></td>
             <td>Music</td>
         </tr>
-        <tr>
+        <tr data-group="8">
             <td><strong>Miatrix com</strong></td>
             <td>Open</td>
             <td>Trial</td>
@@ -426,7 +429,7 @@
             <td>None</td>
             <td>EN</td>
         </tr>
-        <tr>
+        <tr data-group="8">
             <td></td>
             <td></td>
             <td>Member</td>
@@ -438,7 +441,7 @@
             <td></td>
             <td></td>
         </tr>
-        <tr>
+        <tr data-group="8">
             <td></td>
             <td></td>
             <td>Vip</td>
@@ -450,7 +453,7 @@
             <td></td>
             <td></td>
         </tr>
-        <tr>
+        <tr data-group="8">
             <td></td>
             <td></td>
             <td>Lifetime</td>
@@ -462,7 +465,7 @@
             <td></td>
             <td></td>
         </tr>
-        <tr>
+        <tr data-group="9">
             <td><strong>NewzBay cc</strong></td>
             <td>Invite</td>
             <td>Gast (Guest)</td>
@@ -474,7 +477,7 @@
             <td>XMR LTC</td>
             <td>DE</td>
         </tr>
-        <tr>
+        <tr data-group="9">
             <td></td>
             <td></td>
             <td>User</td>
@@ -486,7 +489,7 @@
             <td></td>
             <td></td>
         </tr>
-        <tr>
+        <tr data-group="9">
             <td></td>
             <td></td>
             <td>Friend</td>
@@ -498,7 +501,7 @@
             <td></td>
             <td></td>
         </tr>
-        <tr>
+        <tr data-group="9">
             <td></td>
             <td></td>
             <td>VIP</td>
@@ -510,7 +513,7 @@
             <td></td>
             <td></td>
         </tr>
-<tr>
+        <tr data-group="10">
             <td><strong>NinjaCentral co za</strong></td>
             <td>Invite</td>
             <td>Trial</td>
@@ -522,7 +525,7 @@
             <td>BTC ETH</td>
             <td>EN</td>
         </tr>
-        <tr>
+        <tr data-group="10">
             <td></td>
             <td></td>
             <td>DAN 0</td>
@@ -534,7 +537,7 @@
             <td></td>
             <td></td>
         </tr>
-        <tr>
+        <tr data-group="10">
             <td></td>
             <td></td>
             <td>PurpleX</td>
@@ -546,7 +549,7 @@
             <td></td>
             <td></td>
         </tr>
-        <tr>
+        <tr data-group="10">
             <td></td>
             <td></td>
             <td>UNLIMITED</td>
@@ -558,7 +561,7 @@
             <td></td>
             <td></td>
         </tr>
-        <tr>
+        <tr data-group="11">
             <td><strong>nzb cat</strong></td>
             <td>Invite</td>
             <td>Free</td>
@@ -570,7 +573,7 @@
             <td>BTC BCH</td>
             <td>EN</td>
         </tr>
-        <tr>
+        <tr data-group="11">
             <td></td>
             <td></td>
             <td>Contributor</td>
@@ -582,7 +585,7 @@
             <td></td>
             <td></td>
         </tr>
-        <tr>
+        <tr data-group="11">
             <td></td>
             <td></td>
             <td>VIP</td>
@@ -594,7 +597,7 @@
             <td></td>
             <td></td>
         </tr>
-        <tr>
+        <tr data-group="11">
             <td></td>
             <td></td>
             <td>Lifetime VIP</td>
@@ -606,7 +609,7 @@
             <td></td>
             <td></td>
         </tr>
-        <tr>
+        <tr data-group="12">
             <td><strong>nzbcore info</strong></td>
             <td>Invite</td>
             <td>Free User</td>
@@ -618,7 +621,7 @@
             <td>BTC LTC</td>
             <td>DE</td>
         </tr>
-        <tr>
+        <tr data-group="12">
             <td></td>
             <td></td>
             <td>6 month Member</td>
@@ -630,7 +633,7 @@
             <td></td>
             <td></td>
         </tr>
-        <tr>
+        <tr data-group="12">
             <td></td>
             <td></td>
             <td>1 year Member</td>
@@ -642,7 +645,7 @@
             <td></td>
             <td></td>
         </tr>
-        <tr>
+        <tr data-group="13">
             <td><strong>nzbflix net</strong></td>
             <td>Invite</td>
             <td>?</td>
@@ -654,7 +657,7 @@
             <td>?</td>
             <td>?</td>
         </tr>
-        <tr>
+        <tr data-group="14">
             <td><strong>in***</strong></td>
             <td>Invite</td>
             <td>User</td>
@@ -666,7 +669,7 @@
             <td>BTC LTC XMR ETH</td>
             <td>EN</td>
         </tr>
-        <tr>
+        <tr data-group="14">
             <td></td>
             <td></td>
             <td>Friend</td>
@@ -678,7 +681,7 @@
             <td></td>
             <td></td>
         </tr>
-        <tr>
+        <tr data-group="15">
             <td><strong>NZB su</strong></td>
             <td>Open</td>
             <td>Free</td>
@@ -690,7 +693,7 @@
             <td>LTC DOGE</td>
             <td>EN</td>
         </tr>
-        <tr>
+        <tr data-group="15">
             <td></td>
             <td></td>
             <td>VIP</td>
@@ -702,7 +705,7 @@
             <td>BTC ETH</td>
             <td></td>
         </tr>
-        <tr>
+        <tr data-group="16">
             <td><strong>NZBFinder ws</strong></td>
             <td>Open</td>
             <td>Free</td>
@@ -714,7 +717,7 @@
             <td>LTC ETH</td>
             <td>EN</td>
         </tr>
-        <tr>
+        <tr data-group="16">
             <td></td>
             <td></td>
             <td>Basic</td>
@@ -726,7 +729,7 @@
             <td>BTC bcc</td>
             <td></td>
         </tr>
-        <tr>
+        <tr data-group="16">
             <td></td>
             <td></td>
             <td>Pro</td>
@@ -738,7 +741,7 @@
             <td>DASH</td>
             <td></td>
         </tr>
-        <tr>
+        <tr data-group="16">
             <td></td>
             <td></td>
             <td>Elite</td>
@@ -749,7 +752,7 @@
             <td></td>
             <td></td>
         </tr>
-        <tr>
+        <tr data-group="17">
             <td><strong>NZBgeek info</strong></td>
             <td>Open</td>
             <td>Free</td>
@@ -761,7 +764,7 @@
             <td>LTC DOGE</td>
             <td>EN</td>
         </tr>
-        <tr>
+        <tr data-group="17">
             <td></td>
             <td></td>
             <td>VIP</td>
@@ -773,7 +776,7 @@
             <td>BTC ETH etc</td>
             <td></td>
         </tr>
-<tr>
+<tr data-group="18">
   <td>**NZBNoob.com**</td>
   <td>Open</td>
   <td>Free</td>
@@ -786,7 +789,7 @@
   <td>EN</td>
   <td></td>
 </tr>
-<tr>
+<tr data-group="18">
   <td></td>
   <td></td>
   <td>Vip</td>
@@ -799,7 +802,7 @@
   <td></td>
   <td></td>
 </tr>
-<tr>
+<tr data-group="18">
   <td></td>
   <td></td>
   <td>Vip+</td>
@@ -812,7 +815,7 @@
   <td></td>
   <td></td>
 </tr>
-<tr>
+<tr data-group="19">
   <td>**NZBPlanet.net**</td>
   <td>Open</td>
   <td>User</td>
@@ -825,7 +828,7 @@
   <td>EN</td>
   <td></td>
 </tr>
-<tr>
+<tr data-group="19">
   <td></td>
   <td></td>
   <td>VIP</td>
@@ -838,7 +841,7 @@
   <td></td>
   <td></td>
 </tr>
-<tr>
+<tr data-group="19">
   <td></td>
   <td></td>
   <td>Platinum</td>
@@ -851,7 +854,7 @@
   <td></td>
   <td></td>
 </tr>
-<tr>
+<tr data-group="19">
   <td></td>
   <td></td>
   <td>LULT</td>
@@ -864,7 +867,7 @@
   <td></td>
   <td></td>
 </tr>
-<tr>
+<tr data-group="20">
   <td>**om***</td>
   <td>Invite</td>
   <td>User</td>
@@ -877,7 +880,7 @@
   <td>EN</td>
   <td></td>
 </tr>
-<tr>
+<tr data-group="20">
   <td></td>
   <td></td>
   <td>VIP</td>
@@ -890,7 +893,7 @@
   <td></td>
   <td></td>
 </tr>
-<tr>
+<tr data-group="21">
   <td>**pourcesoir.in**</td>
   <td>Open</td>
   <td>Compte normal</td>
@@ -903,7 +906,7 @@
   <td>FR</td>
   <td></td>
 </tr>
-<tr>
+<tr data-group="21">
   <td></td>
   <td></td>
   <td>Compte Ambassadeur</td>
@@ -916,7 +919,7 @@
   <td></td>
   <td></td>
 </tr>
-<tr>
+<tr data-group="21">
   <td></td>
   <td></td>
   <td>Compte VIP</td>
@@ -929,7 +932,7 @@
   <td></td>
   <td></td>
 </tr>
-<tr>
+<tr data-group="21">
   <td></td>
   <td></td>
   <td>Forfait Usenet illimité</td>
@@ -942,7 +945,7 @@
   <td></td>
   <td></td>
 </tr>
-<tr>
+<tr data-group="22">
   <td>**SceneNZBs.com**</td>
   <td>Open</td>
   <td>User (Free)</td>
@@ -955,7 +958,7 @@
   <td>DE</td>
   <td></td>
 </tr>
-<tr>
+<tr data-group="22">
   <td></td>
   <td></td>
   <td>VIP</td>
@@ -968,7 +971,7 @@
   <td></td>
   <td></td>
 </tr>
-<tr>
+<tr data-group="22">
   <td></td>
   <td></td>
   <td>Premium VIP</td>
@@ -981,7 +984,7 @@
   <td></td>
   <td></td>
 </tr>
-<tr>
+<tr data-group="23">
   <td>**SquareEyed.org**</td>
   <td>Open</td>
   <td>SD User</td>
@@ -994,7 +997,7 @@
   <td>EN</td>
   <td></td>
 </tr>
-<tr>
+<tr data-group="23">
   <td></td>
   <td></td>
   <td>HD Vip</td>
@@ -1007,7 +1010,7 @@
   <td></td>
   <td></td>
 </tr>
-<tr>
+<tr data-group="23">
   <td></td>
   <td></td>
   <td>UHD Vip</td>
@@ -1020,7 +1023,7 @@
   <td></td>
   <td></td>
 </tr>
-<tr>
+<tr data-group="24">
   <td>**Tabula-Rasa.pw**</td>
   <td>Open</td>
   <td>Free</td>
@@ -1033,7 +1036,7 @@
   <td>EN</td>
   <td></td>
 </tr>
-<tr>
+<tr data-group="24">
   <td></td>
   <td></td>
   <td>Supporter</td>
@@ -1046,7 +1049,7 @@
   <td></td>
   <td></td>
 </tr>
-<tr>
+<tr data-group="24">
   <td></td>
   <td></td>
   <td>Supporter++</td>
@@ -1059,7 +1062,7 @@
   <td></td>
   <td></td>
 </tr>
-<tr>
+<tr data-group="25">
   <td>**Usenet-Crawler.com**</td>
   <td>Open</td>
   <td>Free</td>
@@ -1072,7 +1075,7 @@
   <td>EN</td>
   <td></td>
 </tr>
-<tr>
+<tr data-group="25">
   <td></td>
   <td></td>
   <td>BFF</td>
@@ -1085,7 +1088,7 @@
   <td></td>
   <td></td>
 </tr>
-<tr>
+<tr data-group="26">
   <td>**WtFnZb.pw**</td>
   <td>Invite</td>
   <td>Free</td>
@@ -1098,7 +1101,7 @@
   <td>EN</td>
   <td></td>
 </tr>
-<tr>
+<tr data-group="26">
   <td></td>
   <td></td>
   <td>VIP</td>
@@ -1112,6 +1115,8 @@
   <td></td>
 </tr>
 </table>
+
+            <button onclick="sortTable('table-1', 0)">Sort Table 1 by First Column</button>
 
 <a href="#top">Back to top</a>
     
@@ -1326,13 +1331,49 @@
     
 <a href="#top">Back to top</a>
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            new Tablesort(document.getElementById('table-1'));
-            new Tablesort(document.getElementById('table-2'));
-            new Tablesort(document.getElementById('table-3'));
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Initialize Tablesort for each table
+        new Tablesort(document.getElementById('table-1'));
+        new Tablesort(document.getElementById('table-2'));
+        new Tablesort(document.getElementById('table-3'));
+    });
+
+    // Extend Tablesort to support custom sorting
+    Tablesort.extend('data-group', function(item) {
+        return item.getAttribute('data-group') || item.innerText;
+    });
+
+    // Custom function to sort table and keep groups together
+    function sortTable(tableId, columnIndex) {
+        const table = document.getElementById(tableId);
+        const tbody = table.querySelector('tbody');
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+
+        // Create a map of group to rows
+        const groups = rows.reduce((acc, row) => {
+            const group = row.getAttribute('data-group') || row.rowIndex;
+            if (!acc[group]) acc[group] = [];
+            acc[group].push(row);
+            return acc;
+        }, {});
+
+        // Get groups in sorted order based on the first row of each group
+        const sortedGroups = Object.keys(groups).sort((a, b) => {
+            const cellA = groups[a][0].cells[columnIndex].innerText.toLowerCase();
+            const cellB = groups[b][0].cells[columnIndex].innerText.toLowerCase();
+            return cellA.localeCompare(cellB);
         });
-    </script>
+
+        // Append rows to tbody in sorted order
+        tbody.innerHTML = '';
+        sortedGroups.forEach(group => {
+            groups[group].forEach(row => tbody.appendChild(row));
+        });
+    }
+</script>
+
+            
 </body>
 </html>
