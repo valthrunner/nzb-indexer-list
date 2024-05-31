@@ -135,7 +135,6 @@
     
         <h3 id="moderated-indexers">Moderated Indexers</h3>
     <p>Best kind of indexer. They offer API access, which makes automation with tools like Sonarr, and Radarr possible and NZBs can be directly sent to your download manager. They index obfuscated NZBs with release names and passwords.</p>
-<button onclick="resetTable('table-1')">Reset Table</button>
         <table id="table-1">
     <thead>
         <tr>
@@ -1114,9 +1113,6 @@
   <td></td>
 </tr>
 </table>
-<button onclick="resetTable('table-1')">Reset Table</button>
-
-<a href="#top">Back to top</a>
     
     <h3 id="public-indexers">Public Indexers</h3>
     <p>They index automatically from Usenet groups. They only have mostly obfuscated headers and the NZBs never come with a password.</p>
@@ -1338,17 +1334,6 @@
         new Tablesort(document.getElementById('table-3'));
     });
 
-    // Extend Tablesort to support custom sorting
-    Tablesort.extend('data-group', function(item) {
-        return item.getAttribute('data-group') || item.innerText;
-    });
-
-    // Custom function to sort table and keep groups together
-    function sortTable(tableId, columnIndex) {
-        const table = document.getElementById(tableId);
-        const tbody = table.querySelector('tbody');
-        const rows = Array.from(tbody.querySelectorAll('tr'));
-
         // Create a map of group to rows
         const groups = rows.reduce((acc, row) => {
             const group = row.getAttribute('data-group') || row.rowIndex;
@@ -1368,31 +1353,6 @@
         tbody.innerHTML = '';
         sortedGroups.forEach(group => {
             groups[group].forEach(row => tbody.appendChild(row));
-        });
-    }
-    
-    let initialTableOrder = [];
-
-    document.addEventListener('DOMContentLoaded', () => {
-        // Store the initial order of the table rows
-        const rows = document.querySelectorAll('#table-1 tbody tr');
-        rows.forEach(row => {
-            initialTableOrder.push(row.cloneNode(true));
-        });
-
-        // Initialize Tablesort for each table
-        new Tablesort(document.getElementById('table-1'));
-        new Tablesort(document.getElementById('table-2'));
-        new Tablesort(document.getElementById('table-3'));
-    });
-
-    // Function to reset the table to its original order
-    function resetTable(tableId) {
-        const table = document.getElementById(tableId);
-        const tbody = table.querySelector('tbody');
-        tbody.innerHTML = '';
-        initialTableOrder.forEach(row => {
-            tbody.appendChild(row.cloneNode(true));
         });
     }
 </script>
