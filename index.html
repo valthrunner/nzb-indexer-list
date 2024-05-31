@@ -1325,13 +1325,48 @@
     
 <a href="#top">Back to top</a>
     
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            new Tablesort(document.getElementById('table-1'));
-            new Tablesort(document.getElementById('table-2'));
-            new Tablesort(document.getElementById('table-3'));
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Initialize Tablesort for each table
+        new Tablesort(document.getElementById('table-1'));
+        new Tablesort(document.getElementById('table-2'));
+        new Tablesort(document.getElementById('table-3'));
+    });
+
+    // Extend Tablesort to support custom sorting
+    Tablesort.extend('data-group', function(item) {
+        return item.getAttribute('data-group') || item.innerText;
+    });
+
+    // Custom function to sort table and keep groups together
+    function sortTable(tableId, columnIndex) {
+        const table = document.getElementById(tableId);
+        const tbody = table.querySelector('tbody');
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+
+        // Create a map of group to rows
+        const groups = rows.reduce((acc, row) => {
+            const group = row.getAttribute('data-group') || row.rowIndex;
+            if (!acc[group]) acc[group] = [];
+            acc[group].push(row);
+            return acc;
+        }, {});
+
+        // Get groups in sorted order based on the first row of each group
+        const sortedGroups = Object.keys(groups).sort((a, b) => {
+            const cellA = groups[a][0].cells[columnIndex].innerText.toLowerCase();
+            const cellB = groups[b][0].cells[columnIndex].innerText.toLowerCase();
+            return cellA.localeCompare(cellB);
         });
-    </script>
+
+        // Append rows to tbody in sorted order
+        tbody.innerHTML = '';
+        sortedGroups.forEach(group => {
+            groups[group].forEach(row => tbody.appendChild(row));
+        });
+    }
+</script>
 
             
 </body>
