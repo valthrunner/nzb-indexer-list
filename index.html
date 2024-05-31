@@ -1209,45 +1209,12 @@ Great for Dutch and Flemish content, but also a lot of English content.
 
 Thx to Just2it & sbestran
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js"></script>
     <script>
-        const tables = ['table-1', 'table-2', 'table-3'];
-        const originalOrder = {};
-
         document.addEventListener('DOMContentLoaded', () => {
-            tables.forEach(tableId => {
-                const table = document.getElementById(tableId);
-                new Tablesort(table);
-                saveOriginalOrder(tableId);
-            });
+            new Tablesort(document.getElementById('table-1'));
+            new Tablesort(document.getElementById('table-2'));
+            new Tablesort(document.getElementById('table-3'));
         });
-
-        function saveOriginalOrder(tableId) {
-            const rows = Array.from(document.querySelectorAll(`#${tableId} tbody tr`));
-            originalOrder[tableId] = rows.map(row => row.outerHTML);
-        }
-
-        function sortTable(columnIndex, tableId) {
-            const table = document.getElementById(tableId);
-            let rows = Array.from(table.rows).slice(1);
-            let sorted = rows.sort((a, b) => {
-                let cellA = a.cells[columnIndex].innerText;
-                let cellB = b.cells[columnIndex].innerText;
-                return cellA.localeCompare(cellB);
-            });
-            const tbody = table.querySelector('tbody');
-            tbody.innerHTML = '';
-            sorted.forEach(row => tbody.appendChild(row));
-        }
-
-        function resetTable(tableId) {
-            const tbody = document.querySelector(`#${tableId} tbody`);
-            tbody.innerHTML = originalOrder[tableId].join('');
-        }
-
-        function resetAllTables() {
-            tables.forEach(tableId => resetTable(tableId));
-        }
     </script>
 
 </body>
