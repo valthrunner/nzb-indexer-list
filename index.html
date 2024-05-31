@@ -20,8 +20,7 @@
 
         header {
             width: 100%;
-            padding: 80px;
-            padding-bottom: 45px;
+            padding: 80px 20px 45px 20px;
             background: #333;
             color: #fff;
             text-align: center;
@@ -35,13 +34,15 @@
             margin: 20px 0;
         }
 
-        h1, {
+        h1 {
             color: #fff;
         }
         
         h2, h3 {
-            color: #333;
-        }
+  background-color: #bbbbbb;
+  padding: 10px;
+  color: #1a1a1a;
+}
 
         table {
             width: 100%;
@@ -121,16 +122,17 @@
     </div>
 
     <header>
-<h1 id="top">NZB sources</h1>
-    <p style="color:red;">! ! ! For now this site only lists Usenet Indexers. However, forums and other websites will be added in the future. ! ! !</p>
+        <h1 id="top">NZB Sources</h1>
+        <p style="color:red;">! ! ! For now this site only lists Usenet Indexers. However, forums and other websites will be added in the future. ! ! !</p>
     </header>
-    <h2>Table of content:</h2>
 
-<a href="#moderated-indexers"><strong>Moderated Indexers</strong></a>
-<a href="#public-indexers"><strong>Public Indexers</strong></a>
-<a href="#spotweb-indexers"><strong>Spotweb Indexers</strong></a>
-
-    <h3 id="moderated-indexers">Moderated Indexers</h3>
+    <main>
+        <h2>Table of content:</h2>
+        <p><a href="#moderated-indexers"><strong>Moderated Indexers</strong></a></p>
+        <p><a href="#public-indexers"><strong>Public Indexers</strong></a></p>
+        <p><a href="#spotweb-indexers"><strong>Spotweb Indexers</strong></a></p>
+<hr>
+        <h3 id="moderated-indexers">Moderated Indexers</h3>
     <p>Best kind of indexer. They offer API access, which makes automation with tools like Sonarr, and Radarr possible and NZBs can be directly sent to your download manager. They index obfuscated NZBs with release names and passwords.</p>
     <table id="table-1">
     <thead>
