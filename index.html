@@ -1371,10 +1371,19 @@
         });
     }
     
-    // Store the initial order of the table rows
-    const initialTableOrder = [];
-    document.querySelectorAll('#table-1 tbody tr').forEach(row => {
-        initialTableOrder.push(row.cloneNode(true));
+    let initialTableOrder = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Store the initial order of the table rows
+        const rows = document.querySelectorAll('#table-1 tbody tr');
+        rows.forEach(row => {
+            initialTableOrder.push(row.cloneNode(true));
+        });
+
+        // Initialize Tablesort for each table
+        new Tablesort(document.getElementById('table-1'));
+        new Tablesort(document.getElementById('table-2'));
+        new Tablesort(document.getElementById('table-3'));
     });
 
     // Function to reset the table to its original order
@@ -1383,15 +1392,9 @@
         const tbody = table.querySelector('tbody');
         tbody.innerHTML = '';
         initialTableOrder.forEach(row => {
-            tbody.appendChild(row);
+            tbody.appendChild(row.cloneNode(true));
         });
     }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        new Tablesort(document.getElementById('table-1'));
-        new Tablesort(document.getElementById('table-2'));
-        new Tablesort(document.getElementById('table-3'));
-    });
 </script>
 
             
