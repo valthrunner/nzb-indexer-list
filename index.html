@@ -1037,58 +1037,58 @@ Great for Dutch and Flemish content, but also a lot of English content.
          <td></td>
          <td></td>
      </tr>
-<tr>
-    <td>**nzbsearchmachine.com**</td>
-    <td>open on weekends</td>
-    <td>Free</td>
-    <td>Unlimited</td>
-    <td>Unlimited</td>
-    <td>Lifetime</td>
-    <td>Free</td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-</tr>
-<tr>
-    <td>**nzbserver.com**</td>
-    <td>No accounts</td>
-    <td>Free</td>
-    <td>can't be added to ARRs</td>
-    <td>Unlimited</td>
-    <td>Lifetime</td>
-    <td>Free</td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-</tr>
-<tr>
-    <td>**NZBStars.com**</td>
-    <td>Open/no need</td>
-    <td>Free</td>
-    <td>Unlimited</td>
-    <td>Unlimited</td>
-    <td>Lifetime</td>
-    <td>Free</td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-</tr>
-<tr>
-    <td>**spotnzb.com**</td>
-    <td>No accounts</td>
-    <td>Free</td>
-    <td>no API</td>
-    <td>Unlimited</td>
-    <td>Lifetime</td>
-    <td>Free</td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-</tr>
+     <tr>
+         <td>**nzbsearchmachine.com**</td>
+         <td>open on weekends</td>
+         <td>Free</td>
+         <td>Unlimited</td>
+         <td>Unlimited</td>
+         <td>Lifetime</td>
+         <td>Free</td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+     </tr>
+     <tr>
+         <td>**nzbserver.com**</td>
+         <td>No accounts</td>
+         <td>Free</td>
+         <td>can't be added to ARRs</td>
+         <td>Unlimited</td>
+         <td>Lifetime</td>
+         <td>Free</td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+     </tr>
+     <tr>
+         <td>**NZBStars.com**</td>
+         <td>Open/no need</td>
+         <td>Free</td>
+         <td>Unlimited</td>
+         <td>Unlimited</td>
+         <td>Lifetime</td>
+         <td>Free</td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+     </tr>
+     <tr>
+         <td>**spotnzb.com**</td>
+         <td>No accounts</td>
+         <td>Free</td>
+         <td>no API</td>
+         <td>Unlimited</td>
+         <td>Lifetime</td>
+         <td>Free</td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+     </tr>
 </table>
 
 *if you know, you know. If you don't, please don't ask.
@@ -1099,5 +1099,34 @@ Thx to Just2it & sbestran
     <script>
         new Tablesort(document.getElementById('sortable-table'));
     </script>
+    <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const table = document.getElementById('sortableTable');
+    const headers = table.querySelectorAll('th');
+    headers.forEach((header, index) => {
+      header.addEventListener('click', () => {
+        sortTableByColumn(table, index);
+      });
+    });
+  });
+
+  function sortTableByColumn(table, column, asc = true) {
+    const dirModifier = asc ? 1 : -1;
+    const rows = Array.from(table.querySelector('tbody').querySelectorAll('tr'));
+    const sortedRows = rows.sort((a, b) => {
+      const aColText = a.querySelector(`td:nth-child(${column + 1})`).textContent.trim();
+      const bColText = b.querySelector(`td:nth-child(${column + 1})`).textContent.trim();
+      return aColText > bColText ? (1 * dirModifier) : (-1 * dirModifier);
+    });
+    while (table.querySelector('tbody').firstChild) {
+      table.querySelector('tbody').removeChild(table.querySelector('tbody').firstChild);
+    }
+    table.querySelector('tbody').append(...sortedRows);
+    table.querySelectorAll('th').forEach(th => th.classList.remove('sort-asc', 'sort-desc'));
+    table.querySelectorAll('th')[column].classList.toggle('sort-asc', asc);
+    table.querySelectorAll('th')[column].classList.toggle('sort-desc', !asc);
+  }
+</script>
+
 </body>
 </html>
