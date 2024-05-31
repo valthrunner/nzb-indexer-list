@@ -1128,15 +1128,15 @@ Great for Dutch and Flemish content, but also a lot of English content.
 <table id="sortable-table">
  <thead>
      <tr>
-         <th>Indexer</th>
-         <th>Registration status</th>
-         <th>Memberships</th>
-         <th>API/Day</th>
-         <th>NZB/Day</th>
-         <th>Membership duration</th>
-         <th>Price (2024-04-30)</th><th>Paymentmethods</th>
-         <th>Accepted cryptocurrencys</th>
-         <th>Primary content</th><th></th>
+          <th onclick="sortTable(0, 'sortable-table-3')">Indexer</th>
+          <th onclick="sortTable(1, 'sortable-table-3')">Registration status</th>
+          <th onclick="sortTable(2, 'sortable-table-3')">Memberships</th>
+          <th onclick="sortTable(3, 'sortable-table-3')">API/Day</th>
+          <th onclick="sortTable(3, 'sortable-table-3')">NZB/Day</th>
+          <th onclick="sortTable(3, 'sortable-table-3')">Membership duration</th>
+          <th onclick="sortTable(3, 'sortable-table-3')">Price</th>
+          <th onclick="sortTable(3, 'sortable-table-3')">Accepted cryptocurrencys</th>
+          <th onclick="sortTable(3, 'sortable-table-3')">Primary content</th>
      </tr>
  </thead>
      <tr>
@@ -1211,36 +1211,44 @@ Thx to Just2it & sbestran
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js"></script>
     <script>
-        new Tablesort(document.getElementById('sortable-table'));
-    </script>
-    <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const table = document.getElementById('sortableTable');
-    const headers = table.querySelectorAll('th');
-    headers.forEach((header, index) => {
-      header.addEventListener('click', () => {
-        sortTableByColumn(table, index);
-      });
-    });
-  });
+        const tables = ['sortable-table-1', 'sortable-table-2', 'sortable-table-3'];
+        const originalOrder = {};
 
-  function sortTableByColumn(table, column, asc = true) {
-    const dirModifier = asc ? 1 : -1;
-    const rows = Array.from(table.querySelector('tbody').querySelectorAll('tr'));
-    const sortedRows = rows.sort((a, b) => {
-      const aColText = a.querySelector(`td:nth-child(${column + 1})`).textContent.trim();
-      const bColText = b.querySelector(`td:nth-child(${column + 1})`).textContent.trim();
-      return aColText > bColText ? (1 * dirModifier) : (-1 * dirModifier);
-    });
-    while (table.querySelector('tbody').firstChild) {
-      table.querySelector('tbody').removeChild(table.querySelector('tbody').firstChild);
-    }
-    table.querySelector('tbody').append(...sortedRows);
-    table.querySelectorAll('th').forEach(th => th.classList.remove('sort-asc', 'sort-desc'));
-    table.querySelectorAll('th')[column].classList.toggle('sort-asc', asc);
-    table.querySelectorAll('th')[column].classList.toggle('sort-desc', !asc);
-  }
-</script>
+        document.addEventListener('DOMContentLoaded', () => {
+            tables.forEach(tableId => {
+                const table = document.getElementById(tableId);
+                new Tablesort(table);
+                saveOriginalOrder(tableId);
+            });
+        });
+
+        function saveOriginalOrder(tableId) {
+            const rows = Array.from(document.querySelectorAll(`#${tableId} tbody tr`));
+            originalOrder[tableId] = rows.map(row => row.outerHTML);
+        }
+
+        function sortTable(columnIndex, tableId) {
+            const table = document.getElementById(tableId);
+            let rows = Array.from(table.rows).slice(1);
+            let sorted = rows.sort((a, b) => {
+                let cellA = a.cells[columnIndex].innerText;
+                let cellB = b.cells[columnIndex].innerText;
+                return cellA.localeCompare(cellB);
+            });
+            const tbody = table.querySelector('tbody');
+            tbody.innerHTML = '';
+            sorted.forEach(row => tbody.appendChild(row));
+        }
+
+        function resetTable(tableId) {
+            const tbody = document.querySelector(`#${tableId} tbody`);
+            tbody.innerHTML = originalOrder[tableId].join('');
+        }
+
+        function resetAllTables() {
+            tables.forEach(tableId => resetTable(tableId));
+        }
+    </script>
 
 </body>
 </html>
