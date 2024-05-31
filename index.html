@@ -1325,37 +1325,13 @@
     
 <a href="#top">Back to top</a>
     
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Initialize Tablesort for each table
-        new Tablesort(document.getElementById('table-1'));
-        new Tablesort(document.getElementById('table-2'));
-        new Tablesort(document.getElementById('table-3'));
-    });
-
-        // Create a map of group to rows
-        const groups = rows.reduce((acc, row) => {
-            const group = row.getAttribute('data-group') || row.rowIndex;
-            if (!acc[group]) acc[group] = [];
-            acc[group].push(row);
-            return acc;
-        }, {});
-
-        // Get groups in sorted order based on the first row of each group
-        const sortedGroups = Object.keys(groups).sort((a, b) => {
-            const cellA = groups[a][0].cells[columnIndex].innerText.toLowerCase();
-            const cellB = groups[b][0].cells[columnIndex].innerText.toLowerCase();
-            return cellA.localeCompare(cellB);
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            new Tablesort(document.getElementById('table-1'));
+            new Tablesort(document.getElementById('table-2'));
+            new Tablesort(document.getElementById('table-3'));
         });
-
-        // Append rows to tbody in sorted order
-        tbody.innerHTML = '';
-        sortedGroups.forEach(group => {
-            groups[group].forEach(row => tbody.appendChild(row));
-        });
-    }
-</script>
+    </script>
 
             
 </body>
