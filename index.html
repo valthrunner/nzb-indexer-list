@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NZB Sources</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: #fff;
+            /* Removed display: flex and align-items to prevent desktop layout changes */
+        }
+
+        header {
+            width: 100%;
+            padding: 80px 20px 45px 20px;
+            background: #333;
+            color: #fff;
+            text-align: center;
+        }
+
+        main {
+            width: 100%;
+            padding: 10px;
+            background: #2c2c2c;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+            /* Added box-sizing to include padding in width calculations */
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: #fff;
+        }
+        
+        h2, h3 {
+            background-color: #444444;
+            padding: 10px;
+            color: #fff;
+        }
+
+        .table-container {
+            position: relative;
+            max-height: 50vh; /* Adjust the height as needed */
+            overflow-y: auto;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: auto;
+            background-color: #2e2e2e;
+            color: #fff;
+        }
+
+        th, td {
+            min-width: 100px;
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            word-wrap: break-word;
+            background-color: #3a3a3a;
+            color: #fff;
+        }
+
+        th {
+            position: sticky;
+            cursor: pointer;
+            background-color: #1c1c1c;
+            position: sticky;
+            top: 0px; /* Height of .top-bar */
+            z-index: 2;
+        }
+
+        th:hover {
+            background-color: #ddd;
+        }
+
+        .top-bar {
+            width: 100%;
+            background: #1a1a1a;
+            color: #fff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            height: 50px;
+        }
+
+        .top-bar a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+        }
+
+        .top-bar a:hover {
+            background-color: #444;
+        }
+
+table tbody tr:nth-child(odd) td {
+    background-color: #4a4a4a !important; /* Ungerade Zeilen in dunklerem Grau */
+}
+
+table tbody tr:nth-child(even) td {
+    background-color: #6a6a6a !important; /* Gerade Zeilen in hellerem Grau */
+}
+
+
+        /* Mobile Styles */
+        @media (max-width: 1215px) {
+            /* Ensure .top-bar remains fixed on mobile */
+            .top-bar {
+                position: sticky;
+                top: 0;
+                left: 0;
+                width: 100%;
+                z-index: 1000;
+                height: 50px;
+            }
+
+            header {
+                margin-top: 50px; /* To prevent overlap with the sticky top-bar */
+                padding: 20px;
+            }
+
+    .table-container {
+        position: relative; /* Wichtiger Container für Sticky */
+        max-height: 50vh; /* Maximale Höhe */
+        overflow-y: auto; /* Scrollen in der Vertikalen erlauben */
+        overflow-x: auto; /* Scrollen in der Horizontalen erlauben */
+    }
+
+    table {
+        width: auto;
+        min-width: 1380px;
+        border-collapse: collapse;
+        table-layout: auto; /* Für gleichmäßige Spalten */
+    }
+
+    th, td {
+        /* min-width: 100px; */
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        word-wrap: break-word;
+        white-space: normal;
+        word-break: normal;
+        overflow-wrap: normal;
+    }
+
+    th {
+        position: sticky;
+        top: 0; /* Sticky am oberen Rand des Containers */
+        background-color: #1c1c1c; /* Hintergrund für Sticky Header */
+        z-index: 1; /* Damit es über den Tabelleninhalt bleibt */
+    }
+
+            /* Ensure main content fits within the viewport */
+            main {
+                padding: 10px;
+                margin: 20px 0;
+            }
+        }
+    </style>
+</head>
+<body id="top">
+    <div class="top-bar">
+        <a href="#top"><strong>Top</strong></a>
+        <a href="#moderated-indexers"><strong>Moderated Indexers</strong></a>
+        <a href="#public-indexers"><strong>Public Indexers</strong></a>
+        <a href="#spotweb-indexers"><strong>Spotweb Indexers</strong></a>
+    </div>
+
+    <header>
+        <h1 id="top">NZB Sources</h1>
+        <p style="color:red;">! ! ! For now this site only lists Usenet Indexers. However, forums and other websites will be added in the future. ! ! !</p>
+    </header>
+
+    <main>
+        <h2>Table of content:</h2>
+        <p><a href="#moderated-indexers"><strong>Moderated Indexers</strong></a></p>
+        <p><a href="#public-indexers"><strong>Public Indexers</strong></a></p>
+        <p><a href="#spotweb-indexers"><strong>Spotweb Indexers</strong></a></p>
+<hr>
+    
+        <h3 id="moderated-indexers">Moderated Indexers</h3>
+    <p>Best kind of indexer. They offer API access, which makes automation with tools like Sonarr, and Radarr possible and NZBs can be directly sent to your download manager. They index obfuscated NZBs with release names and passwords.</p>
+    <div class="table-container">
+    <table id="table-1">
+    <thead>
+        <tr>
+            <th>Indexer</th>
+            <th>Registration status</th>
+            <th>Memberships</th>
+            <th data-sort-method="api-values">API/Day</th>
+            <th data-sort-method="api-values">NZB/Day</th>
+            <th data-sort-method="unit-values">Membership duration</th>
+            <th data-sort-method="price-values">Price</th>
+            <th>Payment methods</th>
+            <th>Accepted cryptocurrencies</th>
+            <th>Primary content</th>
+        </tr>
+    </thead>
+    <tbody>
+            <tr>
+                <td><strong>abnzb.com</strong></td>
+                <td>Open</td>
+                <td>Free/User</td>
+                <td>0</td>
+                <td>0</td>
+                <td>?</td>
+                <td>Free</td>
+                <td>CoinPayments</td>
+                <td>XMR, BCH, ZEC, BTC, LTC</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>abnzb.com</strong></td>
+                <td>Open</td>
+                <td>Legacy User</td>
+                <td>25</td>
+                <td>10</td>
+                <td>?</td>
+                <td>Free</td>
+                <td>CoinPayments</td>
+                <td>XMR, BCH, ZEC, BTC, LTC</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>abnzb.com</strong></td>
+                <td>Open</td>
+                <td>Supporter</td>
+                <td>2500</td>
+                <td>750</td>
+                <td>1 year</td>
+                <td>$15</td>
+                <td>CoinPayments</td>
+                <td>XMR, BCH, ZEC, BTC, LTC</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>abnzb.com</strong></td>
+                <td>Open</td>
+                <td>VIP</td>
+                <td>10000</td>
+                <td>2500</td>
+                <td>1 year</td>
+                <td>$25</td>
+                <td>CoinPayments</td>
+                <td>XMR, BCH, ZEC, BTC, LTC</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>altHUB.co.za</strong></td>
+                <td>Open</td>
+                <td>Trial</td>
+                <td>1000</td>
+                <td>100</td>
+                <td>14 days</td>
+                <td>Trial</td>
+                <td>PayPal, CoinPayments</td>
+                <td>XMR, BTC, LTC, BCH, ETH, RVN, ZEC, etc</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>altHUB.co.za</strong></td>
+                <td>Open</td>
+                <td>Free</td>
+                <td>100</td>
+                <td>25</td>
+                <td>Lifetime</td>
+                <td>Free</td>
+                <td>PayPal, CoinPayments</td>
+                <td>XMR, BTC, LTC, BCH, ETH, RVN, ZEC, etc</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>altHUB.co.za</strong></td>
+                <td>Open</td>
+                <td>Premium</td>
+                <td>Unlimited</td>
+                <td>Unlimited</td>
+                <td>1y/3y/5y</td>
+                <td>$10/$25/$40</td>
+                <td>PayPal, CoinPayments</td>
+                <td>XMR, BTC, LTC, BCH, ETH, RVN, ZEC, etc</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>altHUB.co.za</strong></td>
+                <td>Open</td>
+                <td>Lifetime</td>
+                <td>Unlimited</td>
+                <td>Unlimited</td>
+                <td>Lifetime</td>
+                <td>$55</td>
+                <td>PayPal, CoinPayments</td>
+                <td>XMR, BTC, LTC, BCH, ETH, RVN, ZEC, etc</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>AnimeTosho.org</strong></td>
+                <td>Open</td>
+                <td>Free/User</td>
+                <td>Unlimited</td>
+                <td>Unlimited</td>
+                <td>Lifetime</td>
+                <td>Free</td>
+                <td>-</td>
+                <td>-</td>
+                <td>EN / Anime</td>
+            </tr>
+
+            <tr>
+                <td><strong>digitalcarnage.info</strong></td>
+                <td>Donate only / open</td>
+                <td>Free</td>
+                <td>10</td>
+                <td>10</td>
+                <td>Lifetime</td>
+                <td>Free</td>
+                <td>Plisio</td>
+                <td>XMR, BCH, BTC, LTC, ETH, USDT</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>digitalcarnage.info</strong></td>
+                <td>Donate only / open</td>
+                <td>Basic</td>
+                <td>2000</td>
+                <td>1000</td>
+                <td>1 year</td>
+                <td>$10</td>
+                <td>Plisio</td>
+                <td>XMR, BCH, BTC, LTC, ETH, USDT</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>digitalcarnage.info</strong></td>
+                <td>Donate only / open</td>
+                <td>VIP</td>
+                <td>5000</td>
+                <td>2500</td>
+                <td>1 year</td>
+                <td>$20</td>
+                <td>Plisio</td>
+                <td>XMR, BCH, BTC, LTC, ETH, USDT</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>digitalcarnage.info</strong></td>
+                <td>Donate only / open</td>
+                <td>Ultra</td>
+                <td>Unlimited</td>
+                <td>Unlimited</td>
+                <td>1 year</td>
+                <td>$35</td>
+                <td>Plisio</td>
+                <td>XMR, BCH, BTC, LTC, ETH, USDT</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>dognzb.cr</strong></td>
+                <td>Invite (down often)</td>
+                <td>Trial</td>
+                <td>100</td>
+                <td>10</td>
+                <td>10 days</td>
+                <td>Trial</td>
+                <td>None (itself)</td>
+                <td>BTC, DOGE</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>dognzb.cr</strong></td>
+                <td>Invite (down often)</td>
+                <td>Lite</td>
+                <td>100</td>
+                <td>10</td>
+                <td>Lifetime</td>
+                <td>Free</td>
+                <td>None (itself)</td>
+                <td>BTC, DOGE</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>dognzb.cr</strong></td>
+                <td>Invite (down often)</td>
+                <td>VIP</td>
+                <td>3000</td>
+                <td>Unlimited</td>
+                <td>1/3 years</td>
+                <td>$20/$50</td>
+                <td>None (itself)</td>
+                <td>BTC, DOGE</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>DrunkenSlug.com</strong></td>
+                <td>Invite</td>
+                <td>Free/Water</td>
+                <td>25</td>
+                <td>5</td>
+                <td>Lifetime</td>
+                <td>Free</td>
+                <td>PayPal, BTCPAY (self hosted), UK Amazon Giftcards</td>
+                <td>BTC, AltCoins (fees)</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>DrunkenSlug.com</strong></td>
+                <td>Invite</td>
+                <td>Ale</td>
+                <td>1000</td>
+                <td>100</td>
+                <td>1 year</td>
+                <td>15€</td>
+                <td>PayPal, BTCPAY (self hosted), UK Amazon Giftcards</td>
+                <td>BTC, AltCoins (fees)</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>DrunkenSlug.com</strong></td>
+                <td>Invite</td>
+                <td>Wine</td>
+                <td>Unlimited</td>
+                <td>Unlimited</td>
+                <td>1 year</td>
+                <td>25€</td>
+                <td>PayPal, BTCPAY (self hosted), UK Amazon Giftcards</td>
+                <td>BTC, AltCoins (fees)</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>GingaDADDY.com</strong></td>
+                <td>Open</td>
+                <td>Free/Member</td>
+                <td>Disabled</td>
+                <td>3</td>
+                <td>Lifetime</td>
+                <td>Free</td>
+                <td>PayPal</td>
+                <td>None</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>GingaDADDY.com</strong></td>
+                <td>Open</td>
+                <td>VIP</td>
+                <td>?</td>
+                <td>Unlimited</td>
+                <td>1 year</td>
+                <td>$17</td>
+                <td>PayPal</td>
+                <td>None</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>GingaDADDY.com</strong></td>
+                <td>Open</td>
+                <td>VIP Supporter</td>
+                <td>?</td>
+                <td>Unlimited</td>
+                <td>1 year</td>
+                <td>$25</td>
+                <td>PayPal</td>
+                <td>None</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>headphones.codeshy.com</strong></td>
+                <td>Open</td>
+                <td>?</td>
+                <td>?</td>
+                <td>?</td>
+                <td>?</td>
+                <td>$3.78 / month</td>
+                <td>PayPal</td>
+                <td>?</td>
+                <td>Music</td>
+            </tr>
+
+            <tr>
+                <td><strong>Miatrix.com</strong></td>
+                <td>Open</td>
+                <td>Trial</td>
+                <td>10</td>
+                <td>2</td>
+                <td>14 days</td>
+                <td>Trial</td>
+                <td>PayPal</td>
+                <td>None</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>Miatrix.com</strong></td>
+                <td>Open</td>
+                <td>Member</td>
+                <td>400</td>
+                <td>100</td>
+                <td>1 year</td>
+                <td>$10</td>
+                <td>PayPal</td>
+                <td>None</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>Miatrix.com</strong></td>
+                <td>Open</td>
+                <td>VIP</td>
+                <td>1000</td>
+                <td>250</td>
+                <td>1 year</td>
+                <td>$20</td>
+                <td>PayPal</td>
+                <td>None</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>Miatrix.com</strong></td>
+                <td>Open</td>
+                <td>Lifetime VIP</td>
+                <td>2000</td>
+                <td>500</td>
+                <td>Lifetime</td>
+                <td>$50</td>
+                <td>PayPal</td>
+                <td>None</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>NewzBay.cc</strong></td>
+                <td>Invite</td>
+                <td>Free/Guest</td>
+                <td>0</td>
+                <td>0</td>
+                <td>Lifetime (until 180d no login)</td>
+                <td>Free</td>
+                <td>Own system, Gift Me Crypto</td>
+                <td>XMR, LTC</td>
+                <td>DE</td>
+            </tr>
+
+            <tr>
+                <td><strong>NewzBay.cc</strong></td>
+                <td>Invite</td>
+                <td>Free/User</td>
+                <td>50</td>
+                <td>0</td>
+                <td></td>
+                <td>Free</td>
+                <td>Own system, Gift Me Crypto</td>
+                <td>XMR, LTC</td>
+                <td>DE</td>
+            </tr>
+
+            <tr>
+                <td><strong>NewzBay.cc</strong></td>
+                <td>Invite</td>
+                <td>Free/Friend</td>
+                <td>50</td>
+                <td>0</td>
+                <td>Lifetime</td>
+                <td>Free</td>
+                <td>Own system, Gift Me Crypto</td>
+                <td>XMR, LTC</td>
+                <td>DE</td>
+            </tr>
+
+            <tr>
+                <td><strong>NewzBay.cc</strong></td>
+                <td>Invite</td>
+                <td>VIP</td>
+                <td>2000</td>
+                <td>300</td>
+                <td>1 year</td>
+                <td>10€</td>
+                <td>Own system, Gift Me Crypto</td>
+                <td>XMR, LTC</td>
+                <td>DE</td>
+            </tr>
+
+            <tr>
+                <td><strong>NinjaCentral.co.za</strong></td>
+                <td>Invite</td>
+                <td>Trial</td>
+                <td>30</td>
+                <td>10</td>
+                <td>14 days</td>
+                <td>Trial</td>
+                <td>Crypto over Discord</td>
+                <td>BTC, ETH</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>NinjaCentral.co.za</strong></td>
+                <td>Invite</td>
+                <td>DAN 0</td>
+                <td>2000</td>
+                <td>450</td>
+                <td>1 year</td>
+                <td>15€</td>
+                <td>Crypto over Discord</td>
+                <td>BTC, ETH</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>NinjaCentral.co.za</strong></td>
+                <td>Invite</td>
+                <td>PurpleX</td>
+                <td>3000</td>
+                <td>1000</td>
+                <td>1 year</td>
+                <td>25€</td>
+                <td>Crypto over Discord</td>
+                <td>BTC, ETH</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>NinjaCentral.co.za</strong></td>
+                <td>Invite</td>
+                <td>UNLIMITED (+Plex share)</td>
+                <td>20000</td>
+                <td>10000</td>
+                <td>Lifetime</td>
+                <td>150€</td>
+                <td>Crypto over Discord</td>
+                <td>BTC, ETH</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>nzb.cat</strong></td>
+                <td>Invite</td>
+                <td>Free</td>
+                <td>100</td>
+                <td>5</td>
+                <td>Lifetime</td>
+                <td>Free</td>
+                <td>Blockonomics</td>
+                <td>BTC, BCH</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>nzb.cat</strong></td>
+                <td>Invite</td>
+                <td>Contributor</td>
+                <td>1000</td>
+                <td>1000</td>
+                <td>1 year</td>
+                <td>$20</td>
+                <td>Blockonomics</td>
+                <td>BTC, BCH</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>nzb.cat</strong></td>
+                <td>Invite</td>
+                <td>VIP</td>
+                <td>5000</td>
+                <td>5000</td>
+                <td>1 year</td>
+                <td>$43</td>
+                <td>Blockonomics</td>
+                <td>BTC, BCH</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>nzb.cat</strong></td>
+                <td>Invite</td>
+                <td>Lifetime VIP</td>
+                <td>Unlimited</td>
+                <td>Unlimited</td>
+                <td>Lifetime</td>
+                <td>$125</td>
+                <td>Blockonomics</td>
+                <td>BTC, BCH</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>nzbcore.info</strong></td>
+                <td>Invite</td>
+                <td>Free/User</td>
+                <td>50</td>
+                <td>10</td>
+                <td>Lifetime</td>
+                <td>ree</td>
+                <td>NOWPayments</td>
+                <td>BTC, LTC</td>
+                <td>DE</td>
+            </tr>
+
+            <tr>
+                <td><strong>nzbcore.info</strong></td>
+                <td>Invite</td>
+                <td>Member (6m)</td>
+                <td>5000</td>
+                <td>500</td>
+                <td>6 month</td>
+                <td>20€</td>
+                <td>NOWPayments</td>
+                <td>BTC, LTC</td>
+                <td>DE</td>
+            </tr>
+
+            <tr>
+                <td><strong>nzbcore.info</strong></td>
+                <td>Invite</td>
+                <td>Member (1y)</td>
+                <td>6000</td>
+                <td>600</td>
+                <td>1 year</td>
+                <td>40€</td>
+                <td>NOWPayments</td>
+                <td>BTC, LTC</td>
+                <td>DE</td>
+            </tr>
+
+            <tr>
+                <td><strong>nzbflix.net</strong></td>
+                <td>Invite</td>
+                <td>?</td>
+                <td>?</td>
+                <td>?</td>
+                <td>?</td>
+                <td>?</td>
+                <td>?</td>
+                <td>?</td>
+                <td>EN, Encodes</td>
+            </tr>
+
+            <tr>
+                <td><strong>nzbs.cc (NEW)</strong></td>
+                <td>Open</td>
+                <td>Free</td>
+                <td>?</td>
+                <td>?</td>
+                <td>?</td>
+                <td>Free</td>
+                <td>?</td>
+                <td>?</td>
+                <td>?</td>
+            </tr>
+
+            <tr>
+                <td><strong>in*</strong></td>
+                <td>Invite</td>
+                <td>User</td>
+                <td>48</td>
+                <td>5</td>
+                <td>Lifetime (until 30d no login)</td>
+                <td>Free</td>
+                <td>PayPal, Mycelium Gear, CoinPayments</td>
+                <td>BTC, LTC, XMR, ETH</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>in*</strong></td>
+                <td>Invite</td>
+                <td>Friend</td>
+                <td>1000</td>
+                <td>1000</td>
+                <td>Lifetime</td>
+                <td>$10</td>
+                <td>PayPal, Mycelium Gear, CoinPayments</td>
+                <td>BTC, LTC, XMR, ETH</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>NZB.su</strong></td>
+                <td>Open</td>
+                <td>Free</td>
+                <td>0</td>
+                <td>0</td>
+                <td>?</td>
+                <td>Free</td>
+                <td>Stripe, Plisio</td>
+                <td>LTC, DOGE, BTC, ETH</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>NZB.su</strong></td>
+                <td>Open</td>
+                <td>VIP</td>
+                <td>5000</td>
+                <td>600</td>
+                <td>1/2/3 years</td>
+                <td>$16/$31/$42</td>
+                <td>Stripe, Plisio</td>
+                <td>LTC, DOGE, BTC, ETH</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>NZBFinder.ws</strong></td>
+                <td>Open</td>
+                <td>Free</td>
+                <td>25</td>
+                <td>3</td>
+                <td>Lifetime</td>
+                <td>Free</td>
+                <td>iDeal, Bancontact, Giropay, EPS, P24, Multibanco, Coinbase, Stripe, SEPA, Credit/Debit Card</td>
+                <td>BTC, XMR, ETH, LTC, DOGE, BCH, SHIB, SOL, Altcoins</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>NZBFinder.ws</strong></td>
+                <td>Open</td>
+                <td>Basic</td>
+                <td>5000</td>
+                <td>5000</td>
+                <td>1 year</td>
+                <td>$15</td>
+                <td>iDeal, Bancontact, Giropay, EPS, P24, Multibanco, Coinbase, Stripe, SEPA, Credit/Debit Card</td>
+                <td>BTC, XMR, ETH, LTC, DOGE, BCH, SHIB, SOL, Altcoins</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>NZBFinder.ws</strong></td>
+                <td>Open</td>
+                <td>Pro</td>
+                <td>20000</td>
+                <td>Unlimited</td>
+                <td>1 year</td>
+                <td>$30</td>
+                <td>iDeal, Bancontact, Giropay, EPS, P24, Multibanco, Coinbase, Stripe, SEPA, Credit/Debit Card</td>
+                <td>BTC, XMR, ETH, LTC, DOGE, BCH, SHIB, SOL, Altcoins</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>NZBFinder.ws</strong></td>
+                <td>Open</td>
+                <td>Elite (+Spotnet)</td>
+                <td>Unlimited</td>
+                <td>Unlimited</td>
+                <td>1 year</td>
+                <td>$45</td>
+                <td>iDeal, Bancontact, Giropay, EPS, P24, Multibanco, Coinbase, Stripe, SEPA, Credit/Debit Card</td>
+                <td>BTC, XMR, ETH, LTC, DOGE, BCH, SHIB, SOL, Altcoins</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>NZBgeek.info</strong></td>
+                <td>Open</td>
+                <td>Trial</td>
+                <td>'Limited'</td>
+                <td>15</td>
+                <td>3 days</td>
+                <td>Trial</td>
+                <td>PayPal, Square Pay, Coinbase, Coingate</td>
+                <td>LTC, DOGE, BTC, ETH, etc</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>NZBgeek.info</strong></td>
+                <td>Open</td>
+                <td>VIP</td>
+                <td>Unlimited</td>
+                <td>Unlimited</td>
+                <td>6m/1y/5y</td>
+                <td>$6/$12/$40</td>
+                <td>PayPal, Square Pay, Coinbase, Coingate</td>
+                <td>LTC, DOGE, BTC, ETH, etc</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>NZBgeek.info</strong></td>
+                <td>Open</td>
+                <td>Lifetime VIP</td>
+                <td>Unlimited</td>
+                <td>Unlimited</td>
+                <td>Lifetime</td>
+                <td>$80</td>
+                <td>PayPal, Square Pay, Coinbase, Coingate</td>
+                <td>LTC, DOGE, BTC, ETH, etc</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>NZBNoob.com</strong></td>
+                <td>Open</td>
+                <td>Free</td>
+                <td>100</td>
+                <td>5</td>
+                <td>Lifetime</td>
+                <td>Free</td>
+                <td>Stripe</td>
+                <td>none (or BTC via support?)</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>NZBNoob.com</strong></td>
+                <td>Open</td>
+                <td>Vip</td>
+                <td>2000</td>
+                <td>200</td>
+                <td>1 year</td>
+                <td>$12</td>
+                <td>Stripe</td>
+                <td>none (or BTC via support?)</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>NZBNoob.com</strong></td>
+                <td>Open</td>
+                <td>Vip+</td>
+                <td>4000</td>
+                <td>2000</td>
+                <td>1 year</td>
+                <td>$22</td>
+                <td>Stripe</td>
+                <td>none (or BTC via support?)</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>NZBPlanet.net</strong></td>
+                <td>Open</td>
+                <td>Trial</td>
+                <td>Disabled</td>
+                <td>3</td>
+                <td>1 days</td>
+                <td>Trial</td>
+                <td>PayPal, Amazon Giftcards, CoinPayments</td>
+                <td>BTC, BCH, LTC, XMR, DOGE</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>NZBPlanet.net</strong></td>
+                <td>Open</td>
+                <td>VIP</td>
+                <td>5000</td>
+                <td>Unlimited</td>
+                <td>1 year</td>
+                <td>11£</td>
+                <td>PayPal, Amazon Giftcards, CoinPayments</td>
+                <td>BTC, BCH, LTC, XMR, DOGE</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>NZBPlanet.net</strong></td>
+                <td>Open</td>
+                <td>Platinum</td>
+                <td>20000</td>
+                <td>Unlimited</td>
+                <td>1 year</td>
+                <td>15£</td>
+                <td>PayPal, Amazon Giftcards, CoinPayments</td>
+                <td>BTC, BCH, LTC, XMR, DOGE</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>NZBPlanet.net</strong></td>
+                <td>Open</td>
+                <td>LULT</td>
+                <td>20000</td>
+                <td>Unlimited</td>
+                <td>Lifetime</td>
+                <td>40£</td>
+                <td>PayPal, Amazon Giftcards, CoinPayments</td>
+                <td>BTC, BCH, LTC, XMR, DOGE</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>om*</strong></td>
+                <td>Invite</td>
+                <td>Free/User</td>
+                <td>10</td>
+                <td>10</td>
+                <td>Lifetime</td>
+                <td>Free</td>
+                <td>own cypto system?</td>
+                <td>BTC, BCH, DASH, DOGE, ETH, LTC, XMR, ZEC</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>om*</strong></td>
+                <td>Invite</td>
+                <td>VIP</td>
+                <td>10000</td>
+                <td>2000</td>
+                <td>1 year</td>
+                <td>10 €</td>
+                <td>own cypto system?</td>
+                <td>BTC, BCH, DASH, DOGE, ETH, LTC, XMR, ZEC</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>pourcesoir.in</strong></td>
+                <td>Open</td>
+                <td>Free/Compte normal</td>
+                <td>0</td>
+                <td>0</td>
+                <td>Lifetime</td>
+                <td>Free</td>
+                <td>Own system, Amazon Giftcards</td>
+                <td>BTC</td>
+                <td>FR</td>
+            </tr>
+
+            <tr>
+                <td><strong>pourcesoir.in</strong></td>
+                <td>Open</td>
+                <td>Compte Ambassadeur</td>
+                <td>5</td>
+                <td>?</td>
+                <td>Lifetime</td>
+                <td>Free</td>
+                <td>Own system, Amazon Giftcards</td>
+                <td>BTC</td>
+                <td>FR</td>
+            </tr>
+
+            <tr>
+                <td><strong>pourcesoir.in</strong></td>
+                <td>Open</td>
+                <td>Compte VIP</td>
+                <td>2000</td>
+                <td>?</td>
+                <td>1 year</td>
+                <td>20€</td>
+                <td>Own system, Amazon Giftcards</td>
+                <td>BTC</td>
+                <td>FR</td>
+            </tr>
+
+            <tr>
+                <td><strong>pourcesoir.in</strong></td>
+                <td>Open</td>
+                <td>Forfait Usenet illimité</td>
+                <td>4000</td>
+                <td>?</td>
+                <td>1 year</td>
+                <td>50€</td>
+                <td>Own system, Amazon Giftcards</td>
+                <td>BTC</td>
+                <td>FR</td>
+            </tr>
+
+            <tr>
+                <td><strong>SceneNZBs.com</strong></td>
+                <td>Open</td>
+                <td>Free/User</td>
+                <td>0</td>
+                <td>5</td>
+                <td>Lifetime</td>
+                <td>Free</td>
+                <td>Stripe, NOWPayments</td>
+                <td>BTC, DASH, ETH, LTC, XMR, etc</td>
+                <td>DE (ES, EN)</td>
+            </tr>
+
+            <tr>
+                <td><strong>SceneNZBs.com</strong></td>
+                <td>Open</td>
+                <td>VIP (no xxx)</td>
+                <td>2000</td>
+                <td>400</td>
+                <td>1 year</td>
+                <td>15€</td>
+                <td>Stripe, NOWPayments</td>
+                <td>BTC, DASH, ETH, LTC, XMR, etc</td>
+                <td>DE (ES, EN)</td>
+            </tr>
+
+            <tr>
+                <td><strong>SceneNZBs.com</strong></td>
+                <td>Open</td>
+                <td>Premium VIP</td>
+                <td>10000</td>
+                <td>2000</td>
+                <td>1 year</td>
+                <td>20€</td>
+                <td>Stripe, NOWPayments</td>
+                <td>BTC, DASH, ETH, LTC, XMR, etc</td>
+                <td>DE (ES, EN)</td>
+            </tr>
+
+            <tr>
+                <td><strong>SquareEyed.org</strong></td>
+                <td>Open</td>
+                <td>Free/SD User</td>
+                <td>10</td>
+                <td>10</td>
+                <td>Lifetime</td>
+                <td>Free</td>
+                <td>Plisio</td>
+                <td>BTC, XMR, BCH, LTC</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>SquareEyed.org</strong></td>
+                <td>Open</td>
+                <td>HD Vip</td>
+                <td>2000</td>
+                <td>500</td>
+                <td>1 year</td>
+                <td>$12</td>
+                <td>Plisio</td>
+                <td>BTC, XMR, BCH, LTC</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>SquareEyed.org</strong></td>
+                <td>Open</td>
+                <td>UHD Vip</td>
+                <td>5000</td>
+                <td>5000</td>
+                <td>1 year</td>
+                <td>$20</td>
+                <td>Plisio</td>
+                <td>BTC, XMR, BCH, LTC</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>Tabula-Rasa.pw</strong></td>
+                <td>Open</td>
+                <td>Free</td>
+                <td>25</td>
+                <td>10</td>
+                <td>Lifetime</td>
+                <td>Free</td>
+                <td>BTCPay</td>
+                <td>BTC, LTC, XMR, Altcoins, AMZN Gift Card</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>Tabula-Rasa.pw</strong></td>
+                <td>Open</td>
+                <td>Supporter</td>
+                <td>2000</td>
+                <td>2000</td>
+                <td>1y/2y</td>
+                <td>$10/$19</td>
+                <td>BTCPay</td>
+                <td>BTC, LTC, XMR, Altcoins, AMZN Gift Card</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>Tabula-Rasa.pw</strong></td>
+                <td>Open</td>
+                <td>Supporter++</td>
+                <td>5000</td>
+                <td>5000</td>
+                <td>1y/2y</td>
+                <td>$20/$38</td>
+                <td>BTCPay</td>
+                <td>BTC, LTC, XMR, Altcoins, AMZN Gift Card</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>Usenet-Crawler.com</strong></td>
+                <td>Open</td>
+                <td>Free</td>
+                <td>50</td>
+                <td>5</td>
+                <td>Lifetime</td>
+                <td>Free</td>
+                <td>Stripe, CoinPayments</td>
+                <td>BTC, ETH, LTC, XMR</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>Usenet-Crawler.com</strong></td>
+                <td>Open</td>
+                <td>BFF</td>
+                <td>10000</td>
+                <td>1000</td>
+                <td>Lifetime</td>
+                <td>20€+</td>
+                <td>Stripe, CoinPayments</td>
+                <td>BTC, ETH, LTC, XMR</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>WtFnZb.pw</strong></td>
+                <td>Invite</td>
+                <td>Free</td>
+                <td>?</td>
+                <td>5?</td>
+                <td>?</td>
+                <td>Free</td>
+                <td>Crypto over E-Mail</td>
+                <td>BTC</td>
+                <td>EN</td>
+            </tr>
+
+            <tr>
+                <td><strong>WtFnZb.pw</strong></td>
+                <td>Invite</td>
+                <td>VIP</td>
+                <td>10000</td>
+                <td>1000</td>
+                <td>1 year</td>
+                <td>25€</td>
+                <td>Crypto over E-Mail</td>
+                <td>BTC</td>
+                <td>EN</td>
+            </tr>
+
+    </tbody>
+    </table>
+    </div>
+
+<a href="#top">Back to top</a>
+
+    <h3 id="public-indexers">Public Indexers</h3>
+    <p>They index automatically from Usenet groups. They only have mostly obfuscated headers and the NZBs never come with a password even if the content is password protected. <br> 
+<span style="color: red;">!!! Be aware that they also index malicious uploads which could contain trojans or other viruses !!!</span></p>
+<div class="table-container">
+<table id="table-2">
+  <thead>
+    <tr>
+        <th>Indexer</th>
+        <th>Registration status</th>
+        <th>Memberships</th>
+        <th>API/Day</th>
+        <th>NZB/Day</th>
+        <th>Membership duration</th>
+        <th>Price (2024-04-30)</th>
+        <th>Paymentmethods</th>
+        <th>Accepted cryptocurrencys</th>
+        <th>Primary content</th>
+        <th></th>
+    </tr>
+  </thead>     
+    <tr>
+        <td><strong>binsearch.info</strong></td>
+        <td>No accounts</td>
+        <td>Free</td>
+        <td>No API</td>
+        <td>Unlimited</td>
+        <td>No account</td>
+        <td>Free</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><strong>BiNZB.com</strong></td>
+        <td>No accounts</td>
+        <td>Free</td>
+        <td>No API</td>
+        <td>Unlimited</td>
+        <td>No account</td>
+        <td>Free</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><strong>FindNZB</strong></td>
+        <td>No accounts</td>
+        <td>Free</td>
+        <td>No API but RSS</td>
+        <td>Unlimited</td>
+        <td>No account</td>
+        <td>Free</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><strong>lolo.sickbeard.com</strong></td>
+        <td>Open</td>
+        <td>Free</td>
+        <td>Unlimited</td>
+        <td>Unlimited</td>
+        <td>Lifetime</td>
+        <td>Free</td>
+        <td>(only with it's app)</td>
+        <td></td>
+        <td></td>
+        <td></td>
+</tr>
+<tr>
+        <td><strong>NZBFriends.com</strong></td>
+        <td>No accounts</td>
+        <td>Free</td>
+        <td>No API but RSS</td>
+        <td>Unlimited</td>
+        <td>No account</td>
+        <td>Free</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><strong>nzbID.net</strong></td>
+        <td>No accounts</td>
+        <td>Free</td>
+        <td>No API but RSS</td>
+        <td>Unlimited</td>
+        <td>No account</td>
+        <td>Free</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+</tr>
+<tr>
+        <td><strong>NZBindex.com</strong></td>
+        <td>Open</td>
+        <td>Free</td>
+        <td>1000 (-200k)</td>
+        <td>Unlimted</td>
+        <td>Lifetime</td>
+        <td>Free</td>
+        <td>?</td>
+        <td>?</td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><strong>NZBKing.com</strong></td>
+        <td>No accounts</td>
+        <td>Free</td>
+        <td>No API</td>
+        <td>Unlimited</td>
+        <td>No account</td>
+        <td>Free</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+</table>
+</div>
+
+<a href="#top">Back to top</a>
+
+    <h3 id="spotweb-indexers">Spotweb Indexers</h3>
+    <p>Great for Dutch and Flemish content, but also a lot of English content.</p>
+    <div class="table-container">
+    <table id="table-3">
+ <thead>
+     <tr>
+          <th>Indexer</th>
+          <th>Registration status</th>
+          <th>Memberships</th>
+          <th>API/Day</th>
+          <th>NZB/Day</th>
+          <th>Membership duration</th>
+          <th>Price</th>
+          <th>Accepted cryptocurrencys</th>
+          <th>Primary content</th>
+     </tr>
+ </thead>
+     <tr>
+         <td><strong>clubnzb.com</strong></td>
+         <td>Open/no need</td>
+         <td>Free</td><td>Unlimited</td>
+         <td>Unlimited</td>
+         <td>Lifetime</td>
+         <td>Free</td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+     </tr>
+     <tr>
+         <td><strong>nzbsearchmachine.com</strong></td>
+         <td>open on weekends</td>
+         <td>Free</td>
+         <td>Unlimited</td>
+         <td>Unlimited</td>
+         <td>Lifetime</td>
+         <td>Free</td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+     </tr>
+     <tr>
+         <td><strong>nzbserver.com</strong></td>
+         <td>No accounts</td>
+         <td>Free</td>
+         <td>can't be added to ARRs</td>
+         <td>Unlimited</td>
+         <td>Lifetime</td>
+         <td>Free</td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+     </tr>
+     <tr>
+         <td><strong>NZBStars.com</strong></td>
+         <td>Open/no need</td>
+         <td>Free</td>
+         <td>Unlimited</td>
+         <td>Unlimited</td>
+         <td>Lifetime</td>
+         <td>Free</td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+     </tr>
+     <tr>
+         <td><strong>spotnzb.com</strong></td>
+         <td>No accounts</td>
+         <td>Free</td>
+         <td>no API</td>
+         <td>Unlimited</td>
+         <td>Lifetime</td>
+         <td>Free</td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+     </tr>
+</table>
+</div>
+    
+    <!-- Wiederholen Sie das gleiche Verfahren für die anderen Tabellen -->
+    
+    </main>
+
+    <p>*if you know, you know. If you don't, please don't ask.</p>
+    <p>Thx to Just2it & sbestran</p>
+    
+<a href="#top">Back to top</a>
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js"></script>
+<script>
+Tablesort.extend('unit-values', function(item) {
+    return true; // Always use this sorter for the column
+}, function(a, b) {
+    function convertToDays(value) {
+        value = value.trim().toLowerCase();
+        if (value.includes('lifetime')) return Infinity;
+        if (value === 'trial') return 0;
+        const match = value.match(/^(\d+)\s*(d|day|days|m|month|months|y|year|years)?$/i);
+        if (match) {
+            const number = parseInt(match[1], 10);
+            const unit = match[2] || 'day'; // Default to 'day' if no unit
+            switch (unit) {
+                case 'd':
+                case 'day':
+                case 'days':
+                    return number;
+                case 'm':
+                case 'month':
+                case 'months':
+                    return number * 30;
+                case 'y':
+                case 'year':
+                case 'years':
+                    return number * 365;
+                default:
+                    return number;
+            }
+        }
+        if (value.includes('until')) return Infinity;
+        return NaN; // Assign NaN to unparseable values
+    }
+
+    const numA = convertToDays(a);
+    const numB = convertToDays(b);
+
+    if (isNaN(numA) && isNaN(numB)) {
+        // Both values are NaN, sort lexicographically
+        return a.localeCompare(b);
+    }
+    if (isNaN(numA)) return 1; // NaN values at the end
+    if (isNaN(numB)) return -1;
+    return numA - numB;
+});
+
+
+Tablesort.extend('api-values', function(item) {
+    return true; // Always use this sorter for the column
+}, function(a, b) {
+    function convertValue(value) {
+        value = value.trim().toLowerCase();
+        if (value === 'unlimited') return Infinity;
+        if (value === 'disabled' || value === 'limited') return 0;
+        const number = parseInt(value.replace(/,/g, ''), 10);
+        if (!isNaN(number)) return number;
+        return NaN; // Assign NaN to unparseable values
+    }
+
+    const numA = convertValue(a);
+    const numB = convertValue(b);
+
+    if (isNaN(numA) && isNaN(numB)) {
+        return a.localeCompare(b);
+    }
+    if (isNaN(numA)) return 1;
+    if (isNaN(numB)) return -1;
+    return numA - numB;
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize Tablesort for each table
+    new Tablesort(document.getElementById('table-1'));
+    new Tablesort(document.getElementById('table-2'));
+    new Tablesort(document.getElementById('table-3'));
+});
+
+Tablesort.extend('price-values', function(item) {
+    return true; // Always use this sorter for the column
+}, function(a, b) {
+    function convertPrice(value) {
+        value = value.trim().toLowerCase();
+        if (value === 'free' || value === 'trial') return 0;
+        const prices = value.match(/[\d.]+/g);
+        if (prices && prices.length > 0) {
+            const total = prices.reduce((sum, p) => sum + parseFloat(p), 0);
+            return total / prices.length;
+        }
+        return NaN; // Assign NaN to unparseable values
+    }
+
+    const numA = convertPrice(a);
+    const numB = convertPrice(b);
+
+    if (isNaN(numA) && isNaN(numB)) {
+        return a.localeCompare(b);
+    }
+    if (isNaN(numA)) return 1;
+    if (isNaN(numB)) return -1;
+    return numA - numB;
+});
+
+
+// Custom function to sort table and keep groups together
+function sortTable(tableId, columnIndex) {
+    const table = document.getElementById(tableId);
+    const tbody = table.querySelector('tbody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+
+    // Group rows by data-group attribute
+    const groups = rows.reduce((acc, row) => {
+        const group = row.getAttribute('data-group') || row.rowIndex;
+        if (!acc[group]) acc[group] = [];
+        acc[group].push(row);
+        return acc;
+    }, {});
+
+    // Sort the groups based on the first row's cell in the specified column
+    const sortedGroups = Object.values(groups).sort((a, b) => {
+        const cellA = a[0].cells[columnIndex].innerText.toLowerCase();
+        const cellB = b[0].cells[columnIndex].innerText.toLowerCase();
+        return cellA.localeCompare(cellB);
+    });
+
+    // Rebuild the table body with sorted groups
+    tbody.innerHTML = '';
+    sortedGroups.forEach(group => {
+        group.forEach(row => tbody.appendChild(row));
+    });
+}
+</script>    
+            
+</body>
+</html>
