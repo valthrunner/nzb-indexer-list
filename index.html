@@ -112,6 +112,22 @@ table tbody tr:nth-child(even) td {
     background-color: #6a6a6a !important; /* Gerade Zeilen in hellerem Grau */
 }
 
+    .back-to-top {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #d3d3d3; /* Light grey background */
+      color: #000; /* Black text */
+      text-decoration: none;
+      border-radius: 5px; /* Rounded corners */
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      border: 1px solid #ccc; /* Light border */
+      transition: background-color 0.3s ease;
+    }
+
+    .back-to-top:hover {
+      background-color: #b0b0b0; /* Darker grey on hover */
+    }
 
         /* Mobile Styles */
         @media (max-width: 1215px) {
@@ -1280,7 +1296,7 @@ table tbody tr:nth-child(even) td {
     </table>
     </div>
 
-<a href="#top">Back to top</a>
+  <a href="#top" class="back-to-top">Back to top</a>
 
     <h3 id="public-indexers">Public Indexers</h3>
     <p>They index automatically from Usenet groups. They only have mostly obfuscated headers and the NZBs never come with a password even if the content is password protected. <br> 
@@ -1409,7 +1425,7 @@ table tbody tr:nth-child(even) td {
 </table>
 </div>
 
-<a href="#top">Back to top</a>
+  <a href="#top" class="back-to-top">Back to top</a>
 
     <h3 id="spotweb-indexers">Spotweb Indexers</h3>
     <p>Great for Dutch and Flemish content, but also a lot of English content.</p>
@@ -1485,10 +1501,10 @@ table tbody tr:nth-child(even) td {
     
     </main>
 
-    <p>     *if you know, you know. If you don't, please don't ask.</p>
-    <p>     Thx to Just2it & sbestran</p>
+    <p>*if you know, you know. If you don't, please don't ask.</p>
+    <p>Thx to Just2it & sbestran</p>
     
-<a href="#top">Back to top</a>
+  <a href="#top" class="back-to-top">Back to top</a>
     
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js"></script>
 <script>
