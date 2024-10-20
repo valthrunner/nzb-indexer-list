@@ -1,1642 +1,1741 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NZB Sources</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            background-color: #1e1e1e;
-            color: #fff;
-            /* Removed display: flex and align-items to prevent desktop layout changes */
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NZB Sources</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.bunny.net/css2?family=poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <meta property="og:title" content="NZB Sources">
+  <meta property="og:description" content="Your ultimate guide to Usenet indexers">
+  <meta property="og:url" content="https://hampelmen.github.io/nzb-sources/">
+  <meta property="og:type" content="website">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Poppins', 'sans-serif'],
+          },
+          colors: {
+            primary: '#6366f1',
+            secondary: '#8b5cf6',
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    @keyframes float {
+      0% {
+        transform: translateY(0px);
+      }
 
-        header {
-            width: 100%;
-            padding: 80px 0px 45px 0px;
-            background: #333;
-            color: #fff;
-            text-align: center;
-        }
+      50% {
+        transform: translateY(-10px);
+      }
 
-        main {
-            width: 100%;
-            padding: 10px;
-            background: #2c2c2c;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin: 20px 0;
-            /* Added box-sizing to include padding in width calculations */
-            box-sizing: border-box;
-        }
-
-        h1 {
-            color: #fff;
-        }
-        
-        h2, h3 {
-            background-color: #444444;
-            padding: 10px;
-            color: #fff;
-        }
-
-        .table-container {
-            position: relative;
-            max-height: 50vh; /* Adjust the height as needed */
-            overflow-y: auto;
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            table-layout: auto;
-            background-color: #2e2e2e;
-            color: #fff;
-        }
-
-        th, td {
-            min-width: 100px;
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-            word-wrap: break-word;
-            background-color: #3a3a3a;
-            color: #fff;
-        }
-
-        th {
-            position: sticky;
-            cursor: pointer;
-            background-color: #1c1c1c;
-            position: sticky;
-            top: 0px; /* Height of .top-bar */
-            z-index: 2;
-        }
-
-        th:hover {
-            background-color: #ddd;
-        }
-
-        .top-bar {
-            width: 100%;
-            background: #1a1a1a;
-            color: #fff;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            height: 50px;
-        }
-
-        .top-bar a {
-            color: #fff;
-            text-decoration: none;
-            padding: 10px 20px;
-        }
-
-        .top-bar a:hover {
-            background-color: #444;
-        }
-
-table tbody tr:nth-child(odd) td {
-    background-color: #4a4a4a !important; /* Ungerade Zeilen in dunklerem Grau */
-}
-
-table tbody tr:nth-child(even) td {
-    background-color: #6a6a6a !important; /* Gerade Zeilen in hellerem Grau */
-}
-
-    .back-to-top {
-      display: inline-block;
-      padding: 10px 20px;
-      background-color: #d3d3d3; /* Light grey background */
-      color: #000; /* Black text */
-      text-decoration: none;
-      border-radius: 5px; /* Rounded corners */
-      font-family: Arial, sans-serif;
-      font-size: 14px;
-      border: 1px solid #ccc; /* Light border */
-      transition: background-color 0.3s ease;
+      100% {
+        transform: translateY(0px);
+      }
     }
 
-    .back-to-top:hover {
-      background-color: #b0b0b0; /* Darker grey on hover */
-    }
-
-        /* Mobile Styles */
-        @media (max-width: 1215px) {
-            /* Ensure .top-bar remains fixed on mobile */
-            .top-bar {
-                position: sticky;
-                top: 0;
-                left: 0;
-                width: 100%;
-                z-index: 1000;
-                height: 50px;
-            }
-
-            header {
-                margin-top: 50px; /* To prevent overlap with the sticky top-bar */
-                padding: 0px;
-            }
-
-    .table-container {
-        position: relative; /* Wichtiger Container für Sticky */
-        max-height: 50vh; /* Maximale Höhe */
-        overflow-y: auto; /* Scrollen in der Vertikalen erlauben */
-        overflow-x: auto; /* Scrollen in der Horizontalen erlauben */
-    }
-
-    table {
-        width: auto;
-        min-width: 1380px;
-        border-collapse: collapse;
-        table-layout: auto; /* Für gleichmäßige Spalten */
-    }
-
-    th, td {
-        /* min-width: 100px; */
-        padding: 12px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-        word-wrap: break-word;
-        white-space: normal;
-        word-break: normal;
-        overflow-wrap: normal;
+    .float {
+      animation: float 3s ease-in-out infinite;
     }
 
     th {
-        position: sticky;
-        top: 0; /* Sticky am oberen Rand des Containers */
-        background-color: #1c1c1c; /* Hintergrund für Sticky Header */
-        z-index: 1; /* Damit es über den Tabelleninhalt bleibt */
+      cursor: pointer;
+      background-color: #374151; /* Adjust this to match your design */
     }
 
-            /* Ensure main content fits within the viewport */
-            main {
-                padding: 10px;
-                margin: 20px 0;
-            }
-        }
-    </style>
+    thead {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background-color: #374151; /* Adjust this to match your design */
+    }
+
+    .table-container {
+      overflow: auto;
+      max-height: 500px; /* Adjust this value as needed */
+      position: relative;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    th, td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #4B5563; /* Adjust this to match your design */
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    main {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    body::-webkit-scrollbar {
+      display: none;
+    }
+
+    #backToTop {
+      display: none;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    #backToTop.show {
+      display: block;
+      opacity: 1;
+    }
+
+    thead {
+      -webkit-user-select: none; /* Safari */
+      -moz-user-select: none;    /* Firefox */
+      -ms-user-select: none;     /* Internet Explorer/Edge */
+      user-select: none;
+    }
+
+    .sticky-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background-color: #374151; /* Matches the current header background color */
+    }
+
+    .sticky-header-wrapper {
+      overflow: auto; /* Change from hidden to auto */
+    }
+
+    .sticky-header,
+    .table-body-wrapper table {
+      table-layout: auto;
+      width: 100%;
+    }
+
+    .sticky-header th,
+    .table-body-wrapper td {
+      width: 10%; /* Adjust based on your needs */
+    }
+  </style>
 </head>
-<body id="top">
-    <div class="top-bar">
-        <a href="#top"><strong>Top</strong></a>
-        <a href="#moderated-indexers"><strong>Moderated Indexers</strong></a>
-        <a href="#public-indexers"><strong>Public Indexers</strong></a>
-        <a href="#spotweb-indexers"><strong>Spotweb Indexers</strong></a>
+
+<body class="bg-gray-900 text-gray-200 font-sans">
+<header class="bg-gradient-to-r from-primary to-secondary py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto">
+    <h1 class="text-4xl sm:text-5xl font-bold text-center text-white mb-4 float">NZB Sources</h1>
+    <p class="text-xl text-center text-white">Your ultimate guide to Usenet indexers</p>
+  </div>
+</header>
+
+<nav class="bg-gray-800 shadow-lg">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <div class="flex items-center">
+        <button id="mobile-menu-button" class="md:hidden text-gray-300 hover:text-white focus:outline-none">
+          <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+          </svg>
+        </button>
+        <div id="navbar-links" class="hidden md:flex items-baseline space-x-4">
+          <a href="#moderated-indexers" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out">Moderated Indexers</a>
+          <a href="#public-indexers" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out">Public Indexers</a>
+          <a href="#spotweb-indexers" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out">Spotweb Indexers</a>
+          <a href="https://rexum.space/p/usenet-provider-deals/" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out">Provider Deals</a>
+        </div>
+      </div>
     </div>
-
-    <header>
-        <h1 id="top">NZB Sources</h1>
-        <p style="color:red;">! ! ! For now this site only lists Usenet Indexers. However, forums and other websites will be added in the future. ! ! !</p>
-    </header>
-
-    <main>
-        <h2>Table of content:</h2>
-        <p><a href="#moderated-indexers" class="back-to-top"><strong>Moderated Indexers</strong></a></p>
-        <p><a href="#public-indexers" class="back-to-top"><strong>Public Indexers</strong></a></p>
-        <p><a href="#spotweb-indexers" class="back-to-top"><strong>Spotweb Indexers</strong></a></p>
-<hr>
-    
-        <h3 id="moderated-indexers">Moderated Indexers</h3>
-    <p>Best kind of indexer. They offer API access, which makes automation with tools like Sonarr, and Radarr possible and NZBs can be directly sent to your download manager. They index obfuscated NZBs with release names and passwords.</p>
-    <div class="table-container">
-<table id="table-1">
-    <thead>
-        <tr>
-            <th>Indexer</th>
-            <th>Registration status</th>
-            <th>Memberships</th>
-            <th data-sort-method="api-values">API/Day</th>
-            <th data-sort-method="api-values">NZB/Day</th>
-            <th data-sort-method="unit-values">Membership duration</th>
-            <th data-sort-method="price-values">Price</th>
-            <th>Payment methods</th>
-            <th>Accepted cryptocurrencies</th>
-            <th>Primary content</th>
-        </tr>
-    </thead>
-    <tbody>
-
-            <tr>
-                <td data-sort="01.01"><strong>abnzb.com</strong></td>
-                <td>Open</td>
-                <td>Free/User</td>
-                <td>0</td>
-                <td>0</td>
-                <td>?</td>
-                <td>Free</td>
-                <td>CoinPayments</td>
-                <td>XMR, BCH, ZEC, BTC, LTC</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="01.02"><strong>abnzb.com</strong></td>
-                <td>Open</td>
-                <td>Legacy User</td>
-                <td>25</td>
-                <td>10</td>
-                <td>?</td>
-                <td>Free</td>
-                <td>CoinPayments</td>
-                <td>XMR, BCH, ZEC, BTC, LTC</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="01.03"><strong>abnzb.com</strong></td>
-                <td>Open</td>
-                <td>Supporter</td>
-                <td>2500</td>
-                <td>750</td>
-                <td>1 year</td>
-                <td>&dollar;15</td>
-                <td>CoinPayments</td>
-                <td>XMR, BCH, ZEC, BTC, LTC</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="01.04"><strong>abnzb.com</strong></td>
-                <td>Open</td>
-                <td>VIP</td>
-                <td>10000</td>
-                <td>2500</td>
-                <td>1 year</td>
-                <td>&dollar;25</td>
-                <td>CoinPayments</td>
-                <td>XMR, BCH, ZEC, BTC, LTC</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="02.01"><strong>altHUB.co.za</strong></td>
-                <td>Open</td>
-                <td>Trial</td>
-                <td>1000</td>
-                <td>100</td>
-                <td>14 days</td>
-                <td>Trial</td>
-                <td>PayPal, CoinPayments</td>
-                <td>XMR, BTC, LTC, BCH, ETH, RVN, ZEC, etc</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="02.02"><strong>altHUB.co.za</strong></td>
-                <td>Open</td>
-                <td>Free</td>
-                <td>100</td>
-                <td>25</td>
-                <td>Lifetime</td>
-                <td>Free</td>
-                <td>PayPal, CoinPayments</td>
-                <td>XMR, BTC, LTC, BCH, ETH, RVN, ZEC, etc</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="02.03"><strong>altHUB.co.za</strong></td>
-                <td>Open</td>
-                <td>Premium</td>
-                <td>Unlimited</td>
-                <td>Unlimited</td>
-                <td>1/3/5 years</td>
-                <td>&dollar;10/&dollar;25/&dollar;40</td>
-                <td>PayPal, CoinPayments</td>
-                <td>XMR, BTC, LTC, BCH, ETH, RVN, ZEC, etc</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="02.04"><strong>altHUB.co.za</strong></td>
-                <td>Open</td>
-                <td>Lifetime</td>
-                <td>Unlimited</td>
-                <td>Unlimited</td>
-                <td>Lifetime</td>
-                <td>&dollar;55</td>
-                <td>PayPal, CoinPayments</td>
-                <td>XMR, BTC, LTC, BCH, ETH, RVN, ZEC, etc</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="03.01"><strong>AnimeTosho.org</strong></td>
-                <td>Open</td>
-                <td>Free/User</td>
-                <td>Unlimited</td>
-                <td>Unlimited</td>
-                <td>Lifetime</td>
-                <td>Free</td>
-                <td>-</td>
-                <td>-</td>
-                <td>EN, Anime</td>
-            </tr>
-
-            <tr>
-                <td data-sort="04.01"><strong>digitalcarnage.info</strong></td>
-                <td>Donate only / open</td>
-                <td>Free</td>
-                <td>10</td>
-                <td>10</td>
-                <td>Lifetime</td>
-                <td>Free</td>
-                <td>Plisio</td>
-                <td>XMR, BCH, BTC, LTC, ETH, USDT</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="04.02"><strong>digitalcarnage.info</strong></td>
-                <td>Donate only / open</td>
-                <td>Basic</td>
-                <td>2000</td>
-                <td>1000</td>
-                <td>1 year</td>
-                <td>&dollar;10</td>
-                <td>Plisio</td>
-                <td>XMR, BCH, BTC, LTC, ETH, USDT</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="04.03"><strong>digitalcarnage.info</strong></td>
-                <td>Donate only / open</td>
-                <td>VIP</td>
-                <td>5000</td>
-                <td>2500</td>
-                <td>1 year</td>
-                <td>&dollar;20</td>
-                <td>Plisio</td>
-                <td>XMR, BCH, BTC, LTC, ETH, USDT</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="04.04"><strong>digitalcarnage.info</strong></td>
-                <td>Donate only / open</td>
-                <td>Ultra</td>
-                <td>Unlimited</td>
-                <td>Unlimited</td>
-                <td>1 year</td>
-                <td>&dollar;35</td>
-                <td>Plisio</td>
-                <td>XMR, BCH, BTC, LTC, ETH, USDT</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="05.01"><strong>dognzb.cr</strong></td>
-                <td>Invite (down often)</td>
-                <td>Trial</td>
-                <td>100</td>
-                <td>10</td>
-                <td>10 days</td>
-                <td>Trial</td>
-                <td>None (itself)</td>
-                <td>BTC, DOGE</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="05.02"><strong>dognzb.cr</strong></td>
-                <td>Invite (down often)</td>
-                <td>Lite</td>
-                <td>100</td>
-                <td>10</td>
-                <td>Lifetime</td>
-                <td>Free</td>
-                <td>None (itself)</td>
-                <td>BTC, DOGE</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="05.03"><strong>dognzb.cr</strong></td>
-                <td>Invite (down often)</td>
-                <td>VIP</td>
-                <td>3000</td>
-                <td>Unlimited</td>
-                <td>1/3 years</td>
-                <td>&dollar;20/&dollar;50</td>
-                <td>None (itself)</td>
-                <td>BTC, DOGE</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="06.01"><strong>DrunkenSlug.com</strong></td>
-                <td>Invite</td>
-                <td>Free/Water</td>
-                <td>25</td>
-                <td>5</td>
-                <td>Lifetime</td>
-                <td>Free</td>
-                <td>PayPal, BTCPAY (self hosted), UK Amazon Giftcards</td>
-                <td>BTC, AltCoins (fees)</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="06.02"><strong>DrunkenSlug.com</strong></td>
-                <td>Invite</td>
-                <td>Ale</td>
-                <td>1000</td>
-                <td>100</td>
-                <td>1 year</td>
-                <td>15&euro;</td>
-                <td>PayPal, BTCPAY (self hosted), UK Amazon Giftcards</td>
-                <td>BTC, AltCoins (fees)</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="06.03"><strong>DrunkenSlug.com</strong></td>
-                <td>Invite</td>
-                <td>Wine</td>
-                <td>Unlimited</td>
-                <td>Unlimited</td>
-                <td>1 year</td>
-                <td>25&euro;</td>
-                <td>PayPal, BTCPAY (self hosted), UK Amazon Giftcards</td>
-                <td>BTC, AltCoins (fees)</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="07.01"><strong>GingaDADDY.com</strong></td>
-                <td>Open</td>
-                <td>Free/Member</td>
-                <td>0</td>
-                <td>3</td>
-                <td>Lifetime</td>
-                <td>Free</td>
-                <td>PayPal</td>
-                <td>None</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="07.02"><strong>GingaDADDY.com</strong></td>
-                <td>Open</td>
-                <td>VIP</td>
-                <td>?</td>
-                <td>Unlimited</td>
-                <td>1 year</td>
-                <td>&dollar;17</td>
-                <td>PayPal</td>
-                <td>None</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="07.03"><strong>GingaDADDY.com</strong></td>
-                <td>Open</td>
-                <td>VIP Supporter</td>
-                <td>?</td>
-                <td>Unlimited</td>
-                <td>1 year</td>
-                <td>&dollar;25</td>
-                <td>PayPal</td>
-                <td>None</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="08.01"><strong>headphones.codeshy.com</strong></td>
-                <td>Open</td>
-                <td>?</td>
-                <td>?</td>
-                <td>?</td>
-                <td>?</td>
-                <td>&dollar;3.78 month</td>
-                <td>PayPal</td>
-                <td>?</td>
-                <td>Music</td>
-            </tr>
-
-            <tr>
-                <td data-sort="09.01"><strong>Miatrix.com</strong></td>
-                <td>Open</td>
-                <td>Trial</td>
-                <td>10</td>
-                <td>2</td>
-                <td>14 days</td>
-                <td>Trial</td>
-                <td>PayPal</td>
-                <td>None</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="09.02"><strong>Miatrix.com</strong></td>
-                <td>Open</td>
-                <td>Member</td>
-                <td>400</td>
-                <td>100</td>
-                <td>1 year</td>
-                <td>&dollar;10</td>
-                <td>PayPal</td>
-                <td>None</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="09.03"><strong>Miatrix.com</strong></td>
-                <td>Open</td>
-                <td>VIP</td>
-                <td>1000</td>
-                <td>250</td>
-                <td>1 year</td>
-                <td>&dollar;20</td>
-                <td>PayPal</td>
-                <td>None</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="09.04"><strong>Miatrix.com</strong></td>
-                <td>Open</td>
-                <td>Lifetime VIP</td>
-                <td>2000</td>
-                <td>500</td>
-                <td>Lifetime</td>
-                <td>&dollar;50</td>
-                <td>PayPal</td>
-                <td>None</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="10.01"><strong>NewzBay.cc</strong></td>
-                <td>Invite</td>
-                <td>Free/Guest</td>
-                <td>0</td>
-                <td>0</td>
-                <td>Lifetime (until 180d no login)</td>
-                <td>Free</td>
-                <td>Own system, Gift Me Crypto</td>
-                <td>XMR, LTC</td>
-                <td>DE</td>
-            </tr>
-
-            <tr>
-                <td data-sort="10.02"><strong>NewzBay.cc</strong></td>
-                <td>Invite</td>
-                <td>Free/User</td>
-                <td>50</td>
-                <td>5</td>
-                <td>30 days</td>
-                <td>Free</td>
-                <td>Own system, Gift Me Crypto</td>
-                <td>XMR, LTC</td>
-                <td>DE</td>
-            </tr>
-
-            <tr>
-                <td data-sort="10.03"><strong>NewzBay.cc</strong></td>
-                <td>Invite</td>
-                <td>Free/Friend</td>
-                <td>50</td>
-                <td>5</td>
-                <td>Lifetime</td>
-                <td>Free</td>
-                <td>Own system, Gift Me Crypto</td>
-                <td>XMR, LTC</td>
-                <td>DE</td>
-            </tr>
-
-            <tr>
-                <td data-sort="10.04"><strong>NewzBay.cc</strong></td>
-                <td>Invite</td>
-                <td>VIP</td>
-                <td>2000</td>
-                <td>300</td>
-                <td>1 year</td>
-                <td>10&euro;</td>
-                <td>Own system, Gift Me Crypto</td>
-                <td>XMR, LTC</td>
-                <td>DE</td>
-            </tr>
-
-            <tr>
-                <td data-sort="10.05"><strong>NewzBay.cc</strong></td>
-                <td>Invite</td>
-                <td>VIP+</td>
-                <td>4000</td>
-                <td>300</td>
-                <td>1 year</td>
-                <td>individual</td>
-                <td>Own system, Gift Me Crypto</td>
-                <td>XMR, LTC</td>
-                <td>DE</td>
-            </tr>
-
-            <tr>
-                <td data-sort="11.01"><strong>NinjaCentral.co.za</strong></td>
-                <td>Invite</td>
-                <td>Trial</td>
-                <td>30</td>
-                <td>10</td>
-                <td>14 days</td>
-                <td>Trial</td>
-                <td>Crypto over Discord</td>
-                <td>BTC, ETH</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="11.02"><strong>NinjaCentral.co.za</strong></td>
-                <td>Invite</td>
-                <td>DAN 0</td>
-                <td>2000</td>
-                <td>450</td>
-                <td>1 year</td>
-                <td>15&euro;</td>
-                <td>Crypto over Discord</td>
-                <td>BTC, ETH</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="11.03"><strong>NinjaCentral.co.za</strong></td>
-                <td>Invite</td>
-                <td>PurpleX</td>
-                <td>3000</td>
-                <td>1000</td>
-                <td>1 year</td>
-                <td>25&euro;</td>
-                <td>Crypto over Discord</td>
-                <td>BTC, ETH</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="11.04"><strong>NinjaCentral.co.za</strong></td>
-                <td>Invite</td>
-                <td>UNLIMITED (+Plex share)</td>
-                <td>20000</td>
-                <td>10000</td>
-                <td>Lifetime</td>
-                <td>150&euro;</td>
-                <td>Crypto over Discord</td>
-                <td>BTC, ETH</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="12.01"><strong>nzb.cat</strong></td>
-                <td>Invite</td>
-                <td>Free</td>
-                <td>100</td>
-                <td>5</td>
-                <td>Lifetime</td>
-                <td>Free</td>
-                <td>Blockonomics</td>
-                <td>BTC, BCH</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="12.02"><strong>nzb.cat</strong></td>
-                <td>Invite</td>
-                <td>Contributor</td>
-                <td>1000</td>
-                <td>1000</td>
-                <td>1 year</td>
-                <td>&dollar;20</td>
-                <td>Blockonomics</td>
-                <td>BTC, BCH</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="12.03"><strong>nzb.cat</strong></td>
-                <td>Invite</td>
-                <td>VIP</td>
-                <td>5000</td>
-                <td>5000</td>
-                <td>1 year</td>
-                <td>&dollar;43</td>
-                <td>Blockonomics</td>
-                <td>BTC, BCH</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="12.04"><strong>nzb.cat</strong></td>
-                <td>Invite</td>
-                <td>Lifetime VIP</td>
-                <td>Unlimited</td>
-                <td>Unlimited</td>
-                <td>Lifetime</td>
-                <td>&dollar;125</td>
-                <td>Blockonomics</td>
-                <td>BTC, BCH</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="13.01"><strong>nzbcore.info</strong></td>
-                <td>Invite</td>
-                <td>Free/User</td>
-                <td>50</td>
-                <td>10</td>
-                <td>Lifetime</td>
-                <td>Free</td>
-                <td>NOWPayments</td>
-                <td>BTC, LTC</td>
-                <td>DE</td>
-            </tr>
-
-            <tr>
-                <td data-sort="13.02"><strong>nzbcore.info</strong></td>
-                <td>Invite</td>
-                <td>Member (6m)</td>
-                <td>5000</td>
-                <td>500</td>
-                <td>6 month</td>
-                <td>20&euro;</td>
-                <td>NOWPayments</td>
-                <td>BTC, LTC</td>
-                <td>DE</td>
-            </tr>
-
-            <tr>
-                <td data-sort="13.03"><strong>nzbcore.info</strong></td>
-                <td>Invite</td>
-                <td>Member (1y)</td>
-                <td>6000</td>
-                <td>600</td>
-                <td>1 year</td>
-                <td>40&euro;</td>
-                <td>NOWPayments</td>
-                <td>BTC, LTC</td>
-                <td>DE</td>
-            </tr>
-
-            <tr>
-                <td data-sort="14.01"><strong>nzbflix.net</strong></td>
-                <td>Invite</td>
-                <td>?</td>
-                <td>?</td>
-                <td>?</td>
-                <td>?</td>
-                <td>?</td>
-                <td>?</td>
-                <td>?</td>
-                <td>EN, Encodes</td>
-            </tr>
-
-            <tr>
-                <td data-sort="15.01"><strong>nzbs.cc (NEW)</strong></td>
-                <td>Open</td>
-                <td>Free</td>
-                <td>?</td>
-                <td>?</td>
-                <td>?</td>
-                <td>Free</td>
-                <td>?</td>
-                <td>?</td>
-                <td>?</td>
-            </tr>
-
-            <tr>
-                <td data-sort="16.01"><strong>in*</strong></td>
-                <td>Invite</td>
-                <td>User</td>
-                <td>48</td>
-                <td>5</td>
-                <td>Lifetime (until 30d no login)</td>
-                <td>Free</td>
-                <td>PayPal, Mycelium Gear, CoinPayments</td>
-                <td>BTC, LTC, XMR, ETH</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="16.02"><strong>in*</strong></td>
-                <td>Invite</td>
-                <td>Friend</td>
-                <td>1000</td>
-                <td>1000</td>
-                <td>Lifetime</td>
-                <td>&dollar;10</td>
-                <td>PayPal, Mycelium Gear, CoinPayments</td>
-                <td>BTC, LTC, XMR, ETH</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="17.01"><strong>NZB.su</strong></td>
-                <td>Open</td>
-                <td>Free</td>
-                <td>0</td>
-                <td>0</td>
-                <td>?</td>
-                <td>Free</td>
-                <td>Stripe, Plisio</td>
-                <td>LTC, DOGE, BTC, ETH</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="17.02"><strong>NZB.su</strong></td>
-                <td>Open</td>
-                <td>VIP</td>
-                <td>5000</td>
-                <td>600</td>
-                <td>1/2/3 years</td>
-                <td>&dollar;16/&dollar;31/&dollar;42</td>
-                <td>Stripe, Plisio</td>
-                <td>LTC, DOGE, BTC, ETH</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="18.01"><strong>NZBFinder.ws</strong></td>
-                <td>Open</td>
-                <td>Free</td>
-                <td>25</td>
-                <td>3</td>
-                <td>Lifetime</td>
-                <td>Free</td>
-                <td>iDeal, Bancontact, Giropay, EPS, P24, Multibanco, Coinbase, Stripe, SEPA, Credit/Debit Card</td>
-                <td>BTC, XMR, ETH, LTC, DOGE, BCH, SHIB, SOL, Altcoins</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="18.02"><strong>NZBFinder.ws</strong></td>
-                <td>Open</td>
-                <td>Basic</td>
-                <td>5000</td>
-                <td>5000</td>
-                <td>1 year</td>
-                <td>&dollar;15</td>
-                <td>iDeal, Bancontact, Giropay, EPS, P24, Multibanco, Coinbase, Stripe, SEPA, Credit/Debit Card</td>
-                <td>BTC, XMR, ETH, LTC, DOGE, BCH, SHIB, SOL, Altcoins</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="18.03"><strong>NZBFinder.ws</strong></td>
-                <td>Open</td>
-                <td>Pro</td>
-                <td>20000</td>
-                <td>Unlimited</td>
-                <td>1 year</td>
-                <td>&dollar;30</td>
-                <td>iDeal, Bancontact, Giropay, EPS, P24, Multibanco, Coinbase, Stripe, SEPA, Credit/Debit Card</td>
-                <td>BTC, XMR, ETH, LTC, DOGE, BCH, SHIB, SOL, Altcoins</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="18.04"><strong>NZBFinder.ws</strong></td>
-                <td>Open</td>
-                <td>Elite (+Spotnet)</td>
-                <td>Unlimited</td>
-                <td>Unlimited</td>
-                <td>1 year</td>
-                <td>&dollar;45</td>
-                <td>iDeal, Bancontact, Giropay, EPS, P24, Multibanco, Coinbase, Stripe, SEPA, Credit/Debit Card</td>
-                <td>BTC, XMR, ETH, LTC, DOGE, BCH, SHIB, SOL, Altcoins</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="19.01"><strong>NZBgeek.info</strong></td>
-                <td>Open</td>
-                <td>Trial</td>
-                <td>Limited</td>
-                <td>15</td>
-                <td>3 days</td>
-                <td>Trial</td>
-                <td>PayPal, Square Pay, Coinbase, Coingate</td>
-                <td>LTC, DOGE, BTC, ETH, etc</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="19.02"><strong>NZBgeek.info</strong></td>
-                <td>Open</td>
-                <td>VIP</td>
-                <td>Unlimited</td>
-                <td>Unlimited</td>
-                <td>6 month / 1/5 years</td>
-                <td>&dollar;6/&dollar;12/&dollar;40</td>
-                <td>PayPal, Square Pay, Coinbase, Coingate</td>
-                <td>LTC, DOGE, BTC, ETH, etc</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="19.03"><strong>NZBgeek.info</strong></td>
-                <td>Open</td>
-                <td>Lifetime VIP</td>
-                <td>Unlimited</td>
-                <td>Unlimited</td>
-                <td>Lifetime</td>
-                <td>&dollar;80</td>
-                <td>PayPal, Square Pay, Coinbase, Coingate</td>
-                <td>LTC, DOGE, BTC, ETH, etc</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="20.01"><strong>NZBNoob.com</strong></td>
-                <td>Open</td>
-                <td>Free</td>
-                <td>100</td>
-                <td>5</td>
-                <td>Lifetime</td>
-                <td>Free</td>
-                <td>Stripe</td>
-                <td>none (or BTC via support?)</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="20.02"><strong>NZBNoob.com</strong></td>
-                <td>Open</td>
-                <td>Vip</td>
-                <td>2000</td>
-                <td>200</td>
-                <td>1 year</td>
-                <td>&dollar;12</td>
-                <td>Stripe</td>
-                <td>none (or BTC via support?)</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="20.03"><strong>NZBNoob.com</strong></td>
-                <td>Open</td>
-                <td>Vip+</td>
-                <td>4000</td>
-                <td>2000</td>
-                <td>1 year</td>
-                <td>&dollar;22</td>
-                <td>Stripe</td>
-                <td>none (or BTC via support?)</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="21.01"><strong>NZBPlanet.net</strong></td>
-                <td>Open</td>
-                <td>Trial</td>
-                <td>0</td>
-                <td>3</td>
-                <td>1 days</td>
-                <td>Trial</td>
-                <td>PayPal, Amazon Giftcards, CoinPayments</td>
-                <td>BTC, BCH, LTC, XMR, DOGE</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="21.02"><strong>NZBPlanet.net</strong></td>
-                <td>Open</td>
-                <td>VIP</td>
-                <td>5000</td>
-                <td>Unlimited</td>
-                <td>1 year</td>
-                <td>11&pound;</td>
-                <td>PayPal, Amazon Giftcards, CoinPayments</td>
-                <td>BTC, BCH, LTC, XMR, DOGE</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="21.03"><strong>NZBPlanet.net</strong></td>
-                <td>Open</td>
-                <td>Platinum</td>
-                <td>20000</td>
-                <td>Unlimited</td>
-                <td>1 year</td>
-                <td>15&pound;</td>
-                <td>PayPal, Amazon Giftcards, CoinPayments</td>
-                <td>BTC, BCH, LTC, XMR, DOGE</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="21.04"><strong>NZBPlanet.net</strong></td>
-                <td>Open</td>
-                <td>LULT</td>
-                <td>20000</td>
-                <td>Unlimited</td>
-                <td>Lifetime</td>
-                <td>40&pound;</td>
-                <td>PayPal, Amazon Giftcards, CoinPayments</td>
-                <td>BTC, BCH, LTC, XMR, DOGE</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="22.01"><strong>om*</strong></td>
-                <td>Invite</td>
-                <td>Free/User</td>
-                <td>10</td>
-                <td>10</td>
-                <td>Lifetime</td>
-                <td>Free</td>
-                <td>own cypto system?</td>
-                <td>BTC, BCH, DASH, DOGE, ETH, LTC, XMR, ZEC</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="22.02"><strong>om*</strong></td>
-                <td>Invite</td>
-                <td>VIP</td>
-                <td>10000</td>
-                <td>2000</td>
-                <td>1 year</td>
-                <td>10&euro;</td>
-                <td>own cypto system?</td>
-                <td>BTC, BCH, DASH, DOGE, ETH, LTC, XMR, ZEC</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="23.01"><strong>pourcesoir.in</strong></td>
-                <td>Open</td>
-                <td>Free/Compte normal</td>
-                <td>0</td>
-                <td>0</td>
-                <td>Lifetime</td>
-                <td>Free</td>
-                <td>Own system, Amazon Giftcards</td>
-                <td>BTC</td>
-                <td>FR</td>
-            </tr>
-
-            <tr>
-                <td data-sort="23.02"><strong>pourcesoir.in</strong></td>
-                <td>Open</td>
-                <td>Compte Ambassadeur</td>
-                <td>5</td>
-                <td>?</td>
-                <td>Lifetime</td>
-                <td>Free</td>
-                <td>Own system, Amazon Giftcards</td>
-                <td>BTC</td>
-                <td>FR</td>
-            </tr>
-
-            <tr>
-                <td data-sort="23.03"><strong>pourcesoir.in</strong></td>
-                <td>Open</td>
-                <td>Compte VIP</td>
-                <td>2000</td>
-                <td>?</td>
-                <td>1 year</td>
-                <td>20&euro;</td>
-                <td>Own system, Amazon Giftcards</td>
-                <td>BTC</td>
-                <td>FR</td>
-            </tr>
-
-            <tr>
-                <td data-sort="23.04"><strong>pourcesoir.in</strong></td>
-                <td>Open</td>
-                <td>Forfait Usenet illimité</td>
-                <td>4000</td>
-                <td>?</td>
-                <td>1 year</td>
-                <td>50&euro;</td>
-                <td>Own system, Amazon Giftcards</td>
-                <td>BTC</td>
-                <td>FR</td>
-            </tr>
-
-            <tr>
-                <td data-sort="24.01"><strong>SceneNZBs.com</strong></td>
-                <td>Open</td>
-                <td>Free/User</td>
-                <td>0</td>
-                <td>5</td>
-                <td>Lifetime</td>
-                <td>Free</td>
-                <td>Stripe, NOWPayments</td>
-                <td>BTC, DASH, ETH, LTC, XMR, etc</td>
-                <td>DE (ES, EN)</td>
-            </tr>
-
-            <tr>
-                <td data-sort="24.02"><strong>SceneNZBs.com</strong></td>
-                <td>Open</td>
-                <td>VIP (no xxx)</td>
-                <td>2000</td>
-                <td>400</td>
-                <td>1 year</td>
-                <td>15&euro;</td>
-                <td>Stripe, NOWPayments</td>
-                <td>BTC, DASH, ETH, LTC, XMR, etc</td>
-                <td>DE (ES, EN)</td>
-            </tr>
-
-            <tr>
-                <td data-sort="24.03"><strong>SceneNZBs.com</strong></td>
-                <td>Open</td>
-                <td>Premium VIP</td>
-                <td>10000</td>
-                <td>2000</td>
-                <td>1 year</td>
-                <td>20&euro;</td>
-                <td>Stripe, NOWPayments</td>
-                <td>BTC, DASH, ETH, LTC, XMR, etc</td>
-                <td>DE (ES, EN)</td>
-            </tr>
-
-            <tr>
-                <td data-sort="25.01"><strong>SquareEyed.org</strong></td>
-                <td>Open</td>
-                <td>Free/SD User</td>
-                <td>10</td>
-                <td>10</td>
-                <td>Lifetime</td>
-                <td>Free</td>
-                <td>Plisio</td>
-                <td>BTC, XMR, BCH, LTC</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="25.02"><strong>SquareEyed.org</strong></td>
-                <td>Open</td>
-                <td>HD Vip</td>
-                <td>2000</td>
-                <td>500</td>
-                <td>1 year</td>
-                <td>&dollar;12</td>
-                <td>Plisio</td>
-                <td>BTC, XMR, BCH, LTC</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="25.03"><strong>SquareEyed.org</strong></td>
-                <td>Open</td>
-                <td>UHD Vip</td>
-                <td>5000</td>
-                <td>5000</td>
-                <td>1 year</td>
-                <td>&dollar;20</td>
-                <td>Plisio</td>
-                <td>BTC, XMR, BCH, LTC</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="26.01"><strong>Tabula-Rasa.pw</strong></td>
-                <td>Open</td>
-                <td>Free</td>
-                <td>25</td>
-                <td>10</td>
-                <td>Lifetime</td>
-                <td>Free</td>
-                <td>BTCPay</td>
-                <td>BTC, LTC, XMR, Altcoins, AMZN Gift Card</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="26.02"><strong>Tabula-Rasa.pw</strong></td>
-                <td>Open</td>
-                <td>Supporter</td>
-                <td>2000</td>
-                <td>2000</td>
-                <td>1/2 years</td>
-                <td>&dollar;10/&dollar;19</td>
-                <td>BTCPay</td>
-                <td>BTC, LTC, XMR, Altcoins, AMZN Gift Card</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="26.03"><strong>Tabula-Rasa.pw</strong></td>
-                <td>Open</td>
-                <td>Supporter++</td>
-                <td>5000</td>
-                <td>5000</td>
-                <td>1/2 years</td>
-                <td>&dollar;20/&dollar;38</td>
-                <td>BTCPay</td>
-                <td>BTC, LTC, XMR, Altcoins, AMZN Gift Card</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="27.01"><strong>Usenet-Crawler.com</strong></td>
-                <td>Open</td>
-                <td>Free</td>
-                <td>50</td>
-                <td>5</td>
-                <td>Lifetime</td>
-                <td>Free</td>
-                <td>Stripe, CoinPayments</td>
-                <td>BTC, ETH, LTC, XMR</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="27.02"><strong>Usenet-Crawler.com</strong></td>
-                <td>Open</td>
-                <td>BFF</td>
-                <td>10000</td>
-                <td>1000</td>
-                <td>Lifetime</td>
-                <td>20&euro;+</td>
-                <td>Stripe, CoinPayments</td>
-                <td>BTC, ETH, LTC, XMR</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="28.01"><strong>WtFnZb.pw</strong></td>
-                <td>Invite</td>
-                <td>Free</td>
-                <td>?</td>
-                <td>5?</td>
-                <td>?</td>
-                <td>Free</td>
-                <td>Crypto over E-Mail</td>
-                <td>BTC</td>
-                <td>EN</td>
-            </tr>
-
-            <tr>
-                <td data-sort="28.02"><strong>WtFnZb.pw</strong></td>
-                <td>Invite</td>
-                <td>VIP</td>
-                <td>10000</td>
-                <td>1000</td>
-                <td>1 year</td>
-                <td>25&euro;</td>
-                <td>Crypto over E-Mail</td>
-                <td>BTC</td>
-                <td>EN</td>
-            </tr>
-
-    </tbody>
-    </table>
+  </div>
+</nav>
+
+<div class="content-wrapper">
+  <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <div class="px-4 py-6 sm:px-0">
+      <div class="border-4 border-dashed border-gray-700 rounded-lg p-4 mb-8">
+        <p class="text-yellow-400 font-bold text-lg text-center">For now this site only lists Usenet Indexers. However, forums and other websites will be added in the future.</p>
+      </div>
+
+      <!-- Search bar -->
+      <div class="mb-8">
+        <input id="searchInput" type="text" placeholder="Search indexers..." class="w-full px-4 py-2 rounded-md bg-gray-700 text-gray-200 border-gray-600 focus:ring-primary focus:border-primary" onkeyup="searchTable()">
+      </div>
+
+      <section id="moderated-indexers" class="mb-12">
+        <div class="flex items-center justify-between">
+          <h2 class="text-3xl font-semibold mb-4 text-primary">Moderated Indexers</h2>
+          <button id="toggleColorButton" class="ml-4 px-3 py-1.5 text-sm bg-gradient-to-r from-pink-500 to-purple-500 text-white hover:from-pink-600 hover:to-purple-600 transition duration-300 shadow-lg transform hover:scale-105 focus:outline-none rounded-md">
+            Color Mode: Off
+          </button>
+        </div>
+        <p class="mb-4">Best kind of indexer. They offer API access, which makes automation with tools like Sonarr, and Radarr possible and NZBs can be directly sent to your download manager. They index obfuscated NZBs with release names and passwords.</p>
+        <div class="table-container bg-gray-800 rounded-lg shadow">
+          <table id="indexerTable" class="min-w-full">
+            <thead>
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider" onclick="sortTable(0, 'indexerTable')">Indexer</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider" onclick="sortTable(1, 'indexerTable')">Registration</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider" onclick="sortTable(2, 'indexerTable')">Memberships</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider" onclick="sortTable(3, 'indexerTable')">API/Day</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider" onclick="sortTable(4, 'indexerTable')">NZB/Day</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider" onclick="sortTable(5, 'indexerTable')">Duration</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider" onclick="sortPriceColumn('indexerTable')">Price</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider" onclick="sortTable(7, 'indexerTable')">Payment</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider" onclick="sortTable(8, 'indexerTable')">Crypto</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider" onclick="sortTable(9, 'indexerTable')">Content</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">abnzb.com</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free/User</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">0</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">0</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">?</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">CoinPayments</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">XMR, BCH, ZEC, BTC, LTC</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">abnzb.com</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Legacy User</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">25</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">10</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">?</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">CoinPayments</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">XMR, BCH, ZEC, BTC, LTC</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">abnzb.com</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Supporter</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">2500</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">750</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">$15</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">CoinPayments</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">XMR, BCH, ZEC, BTC, LTC</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">abnzb.com</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">VIP</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">10000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">2500</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">$25</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">CoinPayments</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">XMR, BCH, ZEC, BTC, LTC</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">altHUB.co.za</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Trial</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">100</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">14 days</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Trial</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">PayPal, CoinPayments</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">XMR, BTC, LTC, BCH, ETH, RVN, ZEC, etc</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">altHUB.co.za</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">100</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">25</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">PayPal, CoinPayments</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">XMR, BTC, LTC, BCH, ETH, RVN, ZEC, etc</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">altHUB.co.za</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Premium</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1/3/5 years</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">$10/$25/$40</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">PayPal, CoinPayments</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">XMR, BTC, LTC, BCH, ETH, RVN, ZEC, etc</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">altHUB.co.za</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">$55</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">PayPal, CoinPayments</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">XMR, BTC, LTC, BCH, ETH, RVN, ZEC, etc</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">AnimeTosho.org</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free/User</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">-</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">-</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN, Anime</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">digitalcarnage.info</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Donate only / open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">10</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">10</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Plisio</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">XMR, BCH, BTC, LTC, ETH, USDT</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">digitalcarnage.info</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Donate only / open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Basic</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">2000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">$10</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Plisio</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">XMR, BCH, BTC, LTC, ETH, USDT</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">digitalcarnage.info</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Donate only / open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">VIP</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">5000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">2500</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">$20</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Plisio</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">XMR, BCH, BTC, LTC, ETH, USDT</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">digitalcarnage.info</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Donate only / open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Ultra</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">$35</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Plisio</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">XMR, BCH, BTC, LTC, ETH, USDT</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">dognzb.cr</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Invite (down often)</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Trial</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">100</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">10</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">10 days</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Trial</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">None (itself)</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, DOGE</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">dognzb.cr</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Invite (down often)</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lite</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">100</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">10</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">None (itself)</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, DOGE</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">dognzb.cr</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Invite (down often)</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">VIP</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">3000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1/3 years</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">$20/$50</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">None (itself)</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, DOGE</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">DrunkenSlug.com</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Invite</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free/Water</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">25</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">5</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">PayPal, BTCPAY (self hosted), UK Amazon Giftcards</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, AltCoins (fees)</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">DrunkenSlug.com</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Invite</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Ale</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">100</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">15€</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">PayPal, BTCPAY (self hosted), UK Amazon Giftcards</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, AltCoins (fees)</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">DrunkenSlug.com</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Invite</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Wine</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">25€</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">PayPal, BTCPAY (self hosted), UK Amazon Giftcards</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, AltCoins (fees)</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">GingaDADDY.com</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free/Member</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">0</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">3</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">PayPal</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">None</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">GingaDADDY.com</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">VIP</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">?</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">$17</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">PayPal</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">None</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">GingaDADDY.com</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">VIP Supporter</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">?</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">$25</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">PayPal</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">None</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">headphones.codeshy.com</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">?</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">?</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">?</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">?</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">$3.78 month</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">PayPal</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">?</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Music</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">Miatrix.com</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Trial</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">10</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">2</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">14 days</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Trial</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">PayPal</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">None</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">Miatrix.com</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Member</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">400</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">100</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">$10</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">PayPal</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">None</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">Miatrix.com</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">VIP</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">250</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">$20</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">PayPal</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">None</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">Miatrix.com</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime VIP</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">2000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">500</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">$50</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">PayPal</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">None</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">NewzBay.cc</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Invite</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free/Guest</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">0</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">0</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime (until 180d no login)</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Own system, Gift Me Crypto</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">XMR, LTC</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">DE</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">NewzBay.cc</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Invite</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free/User</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">50</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">5</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">30 days</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Own system, Gift Me Crypto</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">XMR, LTC</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">DE</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">NewzBay.cc</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Invite</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free/Friend</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">50</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">5</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Own system, Gift Me Crypto</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">XMR, LTC</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">DE</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">NewzBay.cc</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Invite</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">VIP</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">2000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">300</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">10€</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Own system, Gift Me Crypto</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">XMR, LTC</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">DE</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">NewzBay.cc</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Invite</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">VIP+</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">4000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">300</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">individual</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Own system, Gift Me Crypto</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">XMR, LTC</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">DE</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">NinjaCentral.co.za</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Invite</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Trial</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">30</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">10</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">14 days</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Trial</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Crypto over Discord</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, ETH</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">NinjaCentral.co.za</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Invite</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">DAN 0</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">2000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">450</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">15€</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Crypto over Discord</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, ETH</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">NinjaCentral.co.za</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Invite</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">PurpleX</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">3000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">25€</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Crypto over Discord</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, ETH</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">NinjaCentral.co.za</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Invite</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">UNLIMITED (+Plex share)</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">20000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">10000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">150€</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Crypto over Discord</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, ETH</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">nzb.cat</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Invite</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">100</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">5</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Blockonomics</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, BCH</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">nzb.cat</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Invite</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Contributor</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">$20</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Blockonomics</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, BCH</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">nzb.cat</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Invite</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">VIP</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">5000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">5000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">$43</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Blockonomics</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, BCH</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">nzb.cat</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Invite</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime VIP</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">$125</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Blockonomics</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, BCH</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">nzbcore.info</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Invite</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free/User</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">50</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">10</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">NOWPayments</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, LTC</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">DE</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">nzbcore.info</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Invite</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Member (6m)</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">5000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">500</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">6 month</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">20€</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">NOWPayments</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, LTC</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">DE</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">nzbcore.info</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Invite</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Member (1y)</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">6000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">600</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">40€</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">NOWPayments</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, LTC</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">DE</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">nzbflix.net</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Invite</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">?</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">?</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">?</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">?</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">?</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">?</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">?</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN, Encodes</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">nzbs.cc (NEW)</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">?</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">?</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">?</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">?</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">?</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">?</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">in*</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Invite</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">User</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">48</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">5</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime (until 30d no login)</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">PayPal, Mycelium Gear, CoinPayments</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, LTC, XMR, ETH</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">in*</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Invite</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Friend</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">$10</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">PayPal, Mycelium Gear, CoinPayments</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, LTC, XMR, ETH</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">NZB.su</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">0</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">0</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">?</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Stripe, Plisio</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">LTC, DOGE, BTC, ETH</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">NZB.su</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">VIP</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">5000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">600</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1/2/3 years</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">$16/$31/$42</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Stripe, Plisio</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">LTC, DOGE, BTC, ETH</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">NZBFinder.ws</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">25</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">3</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">iDeal, Bancontact, Giropay, EPS, P24, Multibanco, Coinbase, Stripe, SEPA, Credit/Debit Card</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, XMR, ETH, LTC, DOGE, BCH, SHIB, SOL, Altcoins</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">NZBFinder.ws</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Basic</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">5000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">5000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">$15</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">iDeal, Bancontact, Giropay, EPS, P24, Multibanco, Coinbase, Stripe, SEPA, Credit/Debit Card</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, XMR, ETH, LTC, DOGE, BCH, SHIB, SOL, Altcoins</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">NZBFinder.ws</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Pro</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">20000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">$30</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">iDeal, Bancontact, Giropay, EPS, P24, Multibanco, Coinbase, Stripe, SEPA, Credit/Debit Card</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, XMR, ETH, LTC, DOGE, BCH, SHIB, SOL, Altcoins</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">NZBFinder.ws</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Elite (+Spotnet)</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">$45</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">iDeal, Bancontact, Giropay, EPS, P24, Multibanco, Coinbase, Stripe, SEPA, Credit/Debit Card</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, XMR, ETH, LTC, DOGE, BCH, SHIB, SOL, Altcoins</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">NZBgeek.info</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Trial</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Limited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">15</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">3 days</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Trial</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">PayPal, Square Pay, Coinbase, Coingate</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">LTC, DOGE, BTC, ETH, etc</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">NZBgeek.info</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">VIP</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">6 month / 1/5 years</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">$6/$12/$40</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">PayPal, Square Pay, Coinbase, Coingate</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">LTC, DOGE, BTC, ETH, etc</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">NZBgeek.info</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime VIP</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">$80</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">PayPal, Square Pay, Coinbase, Coingate</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">LTC, DOGE, BTC, ETH, etc</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">NZBNoob.com</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">100</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">5</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Stripe</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">none (or BTC via support?)</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">NZBNoob.com</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Vip</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">2000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">200</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">$12</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Stripe</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">none (or BTC via support?)</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">NZBNoob.com</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Vip+</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">4000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">2000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">$22</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Stripe</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">none (or BTC via support?)</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">NZBPlanet.net</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Trial</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">0</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">3</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 days</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Trial</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">PayPal, Amazon Giftcards, CoinPayments</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, BCH, LTC, XMR, DOGE</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">NZBPlanet.net</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">VIP</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">5000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">11£</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">PayPal, Amazon Giftcards, CoinPayments</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, BCH, LTC, XMR, DOGE</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">NZBPlanet.net</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Platinum</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">20000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">15£</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">PayPal, Amazon Giftcards, CoinPayments</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, BCH, LTC, XMR, DOGE</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">NZBPlanet.net</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">LULT</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">20000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">40£</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">PayPal, Amazon Giftcards, CoinPayments</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, BCH, LTC, XMR, DOGE</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">om*</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Invite</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free/User</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">10</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">10</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">own cypto system?</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, BCH, DASH, DOGE, ETH, LTC, XMR, ZEC</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">om*</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Invite</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">VIP</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">10000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">2000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">10€</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">own cypto system?</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, BCH, DASH, DOGE, ETH, LTC, XMR, ZEC</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">pourcesoir.in</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free/Compte normal</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">0</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">0</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Own system, Amazon Giftcards</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">FR</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">pourcesoir.in</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Compte Ambassadeur</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">5</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">?</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Own system, Amazon Giftcards</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">FR</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">pourcesoir.in</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Compte VIP</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">2000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">?</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">20€</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Own system, Amazon Giftcards</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">FR</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">pourcesoir.in</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Forfait Usenet illimité</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">4000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">?</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">50€</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Own system, Amazon Giftcards</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">FR</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">SceneNZBs.com</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free/User</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">0</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">5</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Stripe, NOWPayments</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, DASH, ETH, LTC, XMR, etc</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">DE (ES, EN)</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">SceneNZBs.com</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">VIP (no xxx)</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">2000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">400</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">15€</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Stripe, NOWPayments</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, DASH, ETH, LTC, XMR, etc</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">DE (ES, EN)</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">SceneNZBs.com</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Premium VIP</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">10000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">2000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">20€</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Stripe, NOWPayments</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, DASH, ETH, LTC, XMR, etc</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">DE (ES, EN)</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">SquareEyed.org</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free/SD User</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">10</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">10</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Plisio</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, XMR, BCH, LTC</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">SquareEyed.org</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">HD Vip</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">2000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">500</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">$12</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Plisio</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, XMR, BCH, LTC</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">SquareEyed.org</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">UHD Vip</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">5000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">5000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">$20</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Plisio</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, XMR, BCH, LTC</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">Tabula-Rasa.pw</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">25</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">10</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTCPay</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, LTC, XMR, Altcoins, AMZN Gift Card</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">Tabula-Rasa.pw</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Supporter</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">2000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">2000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1/2 years</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">$10/$19</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTCPay</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, LTC, XMR, Altcoins, AMZN Gift Card</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">Tabula-Rasa.pw</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Supporter++</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">5000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">5000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1/2 years</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">$20/$38</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTCPay</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, LTC, XMR, Altcoins, AMZN Gift Card</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">Usenet-Crawler.com</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">50</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">5</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Stripe, CoinPayments</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, ETH, LTC, XMR</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">Usenet-Crawler.com</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BFF</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">10000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">20€+</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Stripe, CoinPayments</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC, ETH, LTC, XMR</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">WtFnZb.pw</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Invite</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">?</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">5?</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">?</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Crypto over E-Mail</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">WtFnZb.pw</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Invite</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">VIP</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">10000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1000</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">1 year</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">25€</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Crypto over E-Mail</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">BTC</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">EN</td>
+            </tr>
+
+            </tbody>
+          </table>
+        </div>
+    </section>
+    <section id="public-indexers" class="mb-12">
+      <h2 class="text-3xl font-semibold mb-4 text-secondary">Public Indexers</h2>
+      <p class="mb-4">They index automatically from Usenet groups. They only have mostly obfuscated headers and the NZBs never come with a password.</p>
+      <p class="text-red-500 font-bold mb-4">Be aware that they also index malicious uploads which could contain trojans or other viruses</p>
+      <div class="table-container bg-gray-800 rounded-lg shadow">
+        <div class="sticky-header-wrapper">
+          <table id="publicIndexerTable" class="min-w-full divide-y divide-gray-700">
+            <thead class="bg-gray-700 sticky-header">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider" onclick="sortTable(0, 'publicIndexerTable')">Indexer</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider" onclick="sortTable(1, 'publicIndexerTable')">Registration</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider" onclick="sortTable(2, 'publicIndexerTable')">Memberships</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider" onclick="sortTable(3, 'publicIndexerTable')">API/Day</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider" onclick="sortTable(4, 'publicIndexerTable')">NZB/Day</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider" onclick="sortTable(5, 'publicIndexerTable')">Duration</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider" onclick="sortPriceColumn('publicIndexerTable')">Price</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider" onclick="sortTable(7, 'publicIndexerTable')">Payment</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider" onclick="sortTable(8, 'publicIndexerTable')">Crypto</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider" onclick="sortTable(9, 'publicIndexerTable')">Content</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">binsearch.info</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">No accounts</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">No API</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">No account</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm"></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm"></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm"></td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">BiNZB.com</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">No accounts</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">No API</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">No account</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm"></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm"></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm"></td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">FindNZB.net</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">No accounts</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">No API but RSS</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">No account</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm"></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm"></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm"></td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">lolo.sickbeard.com</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">(only with it's app)</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm"></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm"></td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">NZBFriends.com</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">No accounts</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">No API but RSS</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">No account</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm"></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm"></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm"></td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">nzbID.net</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">No accounts</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">No API but RSS</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">No account</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm"></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm"></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm"></td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">(beta.)NZBindex.com</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Open</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Not working (coming soon?)</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">No account</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm"></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm"></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm"></td>
+            </tr>
+
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">NZBKing.com</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">No accounts</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">No API</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">No account</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm"></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm"></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm"></td>
+            </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="spotweb-indexers" class="mb-12">
+      <h2 class="text-3xl font-semibold mb-4 text-primary">Spotweb Indexers</h2>
+      <p class="mb-4">Great for Dutch and Flemish content, but also a lot of English content.</p>
+      <div class="table-container bg-gray-800 rounded-lg shadow">
+        <table id="spotwebIndexerTable" class="min-w-full">
+          <thead class="bg-gray-700 sticky-header">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider" onclick="sortTable(0, 'spotwebIndexerTable')">Indexer</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider" onclick="sortTable(1, 'spotwebIndexerTable')">Registration</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider" onclick="sortTable(2, 'spotwebIndexerTable')">Memberships</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider" onclick="sortTable(3, 'spotwebIndexerTable')">API/Day</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider" onclick="sortTable(4, 'spotwebIndexerTable')">NZB/Day</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider" onclick="sortTable(5, 'spotwebIndexerTable')">Duration</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider" onclick="sortPriceColumn('spotwebIndexerTable')">Price</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">clubnzb.com</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">Open/no need</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+          </tr>
+
+          <tr>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">nzbsearchmachine.com</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">Open on weekends</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+          </tr>
+
+          <tr>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">nzbserver.com</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">No accounts</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">Can't be added to ARRs</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+          </tr>
+
+          <tr>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">NZBStars.com</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">Open/no need</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+          </tr>
+
+          <tr>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">spotnzb.com</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">No accounts</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">no API</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">Unlimited</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">Lifetime</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">Free</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
     </div>
-
-  <a href="#top" class="back-to-top">Back to top</a>
-
-    <h3 id="public-indexers">Public Indexers</h3>
-    <p>They index automatically from Usenet groups. They only have mostly obfuscated headers and the NZBs never come with a password even if the content is password protected. <br> 
-<span style="color: red;">!!! Be aware that they also index malicious uploads which could contain trojans or other viruses !!!</span></p>
-<div class="table-container">
-<table id="table-2">
-  <thead>
-    <tr>
-        <th>Indexer</th>
-        <th>Registration status</th>
-        <th>Memberships</th>
-        <th>API/Day</th>
-        <th>NZB/Day</th>
-        <th>Membership duration</th>
-        <th>Price (2024-04-30)</th>
-        <th>Paymentmethods</th>
-        <th>Accepted cryptocurrencys</th>
-        <th>Primary content</th>
-        <th></th>
-    </tr>
-  </thead>     
-    <tr>
-        <td><strong>binsearch.info</strong></td>
-        <td>No accounts</td>
-        <td>Free</td>
-        <td>No API</td>
-        <td>Unlimited</td>
-        <td>No account</td>
-        <td>Free</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><strong>BiNZB.com</strong></td>
-        <td>No accounts</td>
-        <td>Free</td>
-        <td>No API</td>
-        <td>Unlimited</td>
-        <td>No account</td>
-        <td>Free</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><strong>FindNZB</strong></td>
-        <td>No accounts</td>
-        <td>Free</td>
-        <td>No API but RSS</td>
-        <td>Unlimited</td>
-        <td>No account</td>
-        <td>Free</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><strong>lolo.sickbeard.com</strong></td>
-        <td>Open</td>
-        <td>Free</td>
-        <td>Unlimited</td>
-        <td>Unlimited</td>
-        <td>Lifetime</td>
-        <td>Free</td>
-        <td>(only with it's app)</td>
-        <td></td>
-        <td></td>
-        <td></td>
-</tr>
-<tr>
-        <td><strong>NZBFriends.com</strong></td>
-        <td>No accounts</td>
-        <td>Free</td>
-        <td>No API but RSS</td>
-        <td>Unlimited</td>
-        <td>No account</td>
-        <td>Free</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><strong>nzbID.net</strong></td>
-        <td>No accounts</td>
-        <td>Free</td>
-        <td>No API but RSS</td>
-        <td>Unlimited</td>
-        <td>No account</td>
-        <td>Free</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-</tr>
-<tr>
-        <td><strong>NZBindex.com</strong></td>
-        <td>Open</td>
-        <td>Free</td>
-        <td>1000 (-200k)</td>
-        <td>Unlimted</td>
-        <td>Lifetime</td>
-        <td>Free</td>
-        <td>?</td>
-        <td>?</td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><strong>NZBKing.com</strong></td>
-        <td>No accounts</td>
-        <td>Free</td>
-        <td>No API</td>
-        <td>Unlimited</td>
-        <td>No account</td>
-        <td>Free</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-</table>
+</main>
 </div>
 
-  <a href="#top" class="back-to-top">Back to top</a>
+<button id="backToTop" class="fixed bottom-8 right-8 bg-primary text-white p-3 rounded-full shadow-lg hidden">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+  </svg>
+</button>
 
-    <h3 id="spotweb-indexers">Spotweb Indexers</h3>
-    <p>Great for Dutch and Flemish content, but also a lot of English content.</p>
-    <div class="table-container">
-    <table id="table-3">
- <thead>
-     <tr>
-          <th>Indexer</th>
-          <th>Registration status</th>
-          <th>Memberships</th>
-          <th>API/Day</th>
-          <th>NZB/Day</th>
-          <th>Membership duration</th>
-          <th>Price</th>
-          <th>Accepted cryptocurrencys</th>
-          <th>Primary content</th>
-     </tr>
- </thead>
-     <tr>
-         <td><strong>clubnzb.com</strong></td>
-         <td>Open/no need</td>
-         <td>Free</td>
-         <td>Unlimited</td>
-         <td>Unlimited</td>
-         <td>Lifetime</td>
-         <td>Free</td>
-         <td></td><td></td>
-     </tr>
-     <tr>
-         <td><strong>nzbsearchmachine.com</strong></td>
-         <td>open on weekends</td>
-         <td>Free</td>
-         <td>Unlimited</td>
-         <td>Unlimited</td>
-         <td>Lifetime</td>
-         <td>Free</td>
-         <td></td><td></td>
-     </tr>
-     <tr>
-         <td><strong>nzbserver.com</strong></td>
-         <td>No accounts</td>
-         <td>Free</td>
-         <td>can't be added to ARRs</td>
-         <td>Unlimited</td>
-         <td>Lifetime</td>
-         <td>Free</td>
-         <td></td><td></td>
-     </tr>
-     <tr>
-         <td><strong>NZBStars.com</strong></td>
-         <td>Open/no need</td>
-         <td>Free</td>
-         <td>Unlimited</td>
-         <td>Unlimited</td>
-         <td>Lifetime</td>
-         <td>Free</td>
-         <td></td><td></td>
-     </tr>
-     <tr>
-         <td><strong>spotnzb.com</strong></td>
-         <td>No accounts</td>
-         <td>Free</td>
-         <td>no API</td>
-         <td>Unlimited</td>
-         <td>Lifetime</td>
-         <td>Free</td>
-         <td></td><td></td>
-     </tr>
-</table>
-</div>
-    
-    <!-- Wiederholen Sie das gleiche Verfahren für die anderen Tabellen -->
-    
-    </main>
-
-    <p>*if you know, you know. If you don't, please don't ask.</p>
-    <p>Thx to Just2it & sbestran</p>
-    
-  <a href="#top" class="back-to-top">Back to top</a>
-    
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js"></script>
+<footer class="bg-gray-800 py-8 px-4">
+  <div class="max-w-7xl mx-auto text-center">
+    <p class="mb-2">*if you know, you know. If you don't, please don't ask.</p>
+    <p class="mb-4">Thx to Just2it, sbestran & <a href="https://rexum.space">rexum</a></p>
+    <a href="https://github.com/Hampelmen/nzb-sources/" class="inline-flex items-center px-4 py-2 bg-gray-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-600 active:bg-gray-800 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150" target="_blank" rel="noopener noreferrer">
+      <svg class="w-5 h-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M10 0C4.477 0 0 4.484 0 10.017c0 4.425 2.863 8.178 6.838 9.487.5.09.683-.219.683-.488v-1.748c-2.782.606-3.365-1.355-3.365-1.355-.454-1.156-1.11-1.464-1.11-1.464-.91-.626.068-.614.068-.614 1.003.07 1.53 1.057 1.53 1.057.894 1.539 2.347 1.094 2.917.836.09-.662.35-1.095.636-1.346-2.221-.254-4.555-1.115-4.555-4.961 0-1.095.39-1.99 1.029-2.69-.1-.254-.446-1.276.098-2.659 0 0 .84-.27 2.75 1.025a9.366 9.366 0 012.503-.34c.849.003 1.704.116 2.503.34 1.91-1.295 2.75-1.025 2.75-1.025.544 1.383.198 2.405.097 2.659.64.7 1.029 1.595 1.029 2.69 0 3.855-2.336 4.703-4.563 4.953.36.309.68.922.68 1.86v2.754c0 .27.18.583.688.486C17.137 18.195 20 14.442 20 10.017 20 4.484 15.523 0 10 0z" clip-rule="evenodd" />
+      </svg>
+      VIEW ON GitHub
+    </a>
+  </div>
+</footer>
 <script>
-Tablesort.extend('unit-values', function(item) {
-    return true; // Always use this sorter for the column
-}, function(a, b) {
-    function convertToDays(value) {
-        value = value.trim().toLowerCase();
-        if (value.includes('lifetime')) return Infinity;
-        if (value === 'trial') return 0;
-        const match = value.match(/^(\d+)\s*(d|day|days|m|month|months|y|year|years)?$/i);
-        if (match) {
-            const number = parseInt(match[1], 10);
-            const unit = match[2] || 'day'; // Default to 'day' if no unit
-            switch (unit) {
-                case 'd':
-                case 'day':
-                case 'days':
-                    return number;
-                case 'm':
-                case 'month':
-                case 'months':
-                    return number * 30;
-                case 'y':
-                case 'year':
-                case 'years':
-                    return number * 365;
-                default:
-                    return number;
+  window.onscroll = function() {
+    var backToTopButton = document.getElementById("backToTop");
+    if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+      backToTopButton.classList.add("show");
+    } else {
+      backToTopButton.classList.remove("show");
+    }
+  };
+  // Scroll to the top when the button is clicked
+  document.getElementById("backToTop").onclick = function() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
+  function sortTable(columnIndex, tableId) {
+    var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+    table = document.getElementById(tableId);
+    switching = true;
+    dir = "asc";
+    while (switching) {
+      switching = false;
+      rows = table.rows;
+      for (i = 1; i < (rows.length - 1); i++) {
+        shouldSwitch = false;
+        x = rows[i].getElementsByTagName("TD")[columnIndex];
+        y = rows[i + 1].getElementsByTagName("TD")[columnIndex];
+        var xValue = parseValue(x.innerHTML, columnIndex);
+        var yValue = parseValue(y.innerHTML, columnIndex);
+        if (dir == "asc") {
+          if (xValue > yValue) {
+            shouldSwitch = true;
+            break;
+          }
+        } else if (dir == "desc") {
+          if (xValue < yValue) {
+            shouldSwitch = true;
+            break;
+          }
+        }
+      }
+      if (shouldSwitch) {
+        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+        switching = true;
+        switchcount++;
+      } else {
+        if (switchcount == 0 && dir == "asc") {
+          dir = "desc";
+          switching = true;
+        }
+      }
+    }
+  }
+
+  function parseValue(value, columnIndex) {
+    if (columnIndex === 3 || columnIndex === 4) { // API/Day and NZB/Day columns
+      if (value.toLowerCase() === 'unlimited') return Infinity;
+      if (value.toLowerCase() === 'limited') return 1;
+      return parseFloat(value.replace(/[^0-9.]/g, '')) || 0;
+    }
+    if (columnIndex === 5) { // Duration column
+      return convertToDays(value);
+    }
+    return value.toLowerCase(); // For alphabetical sorting
+  }
+
+  function convertToDays(value) {
+    value = value.trim().toLowerCase();
+    if (value.includes('lifetime')) return Infinity;
+    if (value === 'trial') return 0;
+    const match = value.match(/^(\d+)\s*(d|day|days|m|month|months|y|year|years)?$/i);
+    if (match) {
+      const number = parseInt(match[1], 10);
+      const unit = match[2] || 'day'; // Default to 'day' if no unit
+      switch (unit) {
+        case 'd':
+        case 'day':
+        case 'days':
+          return number;
+        case 'm':
+        case 'month':
+        case 'months':
+          return number * 30;
+        case 'y':
+        case 'year':
+        case 'years':
+          return number * 365;
+        default:
+          return number;
+      }
+    }
+    if (value.includes('until')) return Infinity;
+    return NaN; // Assign NaN to unparseable values
+  }
+
+  function sortPriceColumn(tableId) {
+    var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+    table = document.getElementById(tableId);
+    switching = true;
+    dir = "asc";
+    while (switching) {
+      switching = false;
+      rows = table.rows;
+      for (i = 1; i < (rows.length - 1); i++) {
+        shouldSwitch = false;
+        x = rows[i].getElementsByTagName("TD")[4];
+        y = rows[i + 1].getElementsByTagName("TD")[4];
+        var xValue = parsePrice(x.innerHTML);
+        var yValue = parsePrice(y.innerHTML);
+        if (dir == "asc") {
+          if (xValue > yValue) {
+            shouldSwitch = true;
+            break;
+          }
+        } else if (dir == "desc") {
+          if (xValue < yValue) {
+            shouldSwitch = true;
+            break;
+          }
+        }
+      }
+      if (shouldSwitch) {
+        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+        switching = true;
+        switchcount++;
+      } else {
+        if (switchcount == 0 && dir == "asc") {
+          dir = "desc";
+          switching = true;
+        }
+      }
+    }
+  }
+
+  function searchTable() {
+    var input, filter, tables, tr, td, i, j, k, txtValue;
+    input = document.getElementById("searchInput");
+    filter = input.value.toLowerCase();
+    tables = document.querySelectorAll("table");
+    for (k = 0; k < tables.length; k++) {
+      tr = tables[k].getElementsByTagName("tr");
+      for (i = 1; i < tr.length; i++) {
+        tr[i].style.display = "none";
+        td = tr[i].getElementsByTagName("td");
+        for (j = 0; j < td.length; j++) {
+          if (td[j]) {
+            txtValue = td[j].textContent || td[j].innerText;
+            if (txtValue.toLowerCase().indexOf(filter) > -1) {
+              tr[i].style.display = "";
+              break;
             }
+          }
         }
-        if (value.includes('until')) return Infinity;
-        return NaN; // Assign NaN to unparseable values
+      }
     }
+  }
+  function parsePrice(priceString) {
+    // Handle common cases: "Free" and "Trial"
+    if (priceString.toLowerCase() === "free") return 0;
+    if (priceString.toLowerCase() === "trial") return -1;
+    // Remove non-numeric characters and parse to float
+    var price = parseFloat(priceString.replace(/[^0-9.]/g, ''));
+    return isNaN(price) ? Infinity : price; // If parsing fails, return a high number (Infinity)
+  }
 
-    const numA = convertToDays(a);
-    const numB = convertToDays(b);
+  document.addEventListener('DOMContentLoaded', function() {
+    const tableContainers = document.querySelectorAll('.table-container');
 
-    if (isNaN(numA) && isNaN(numB)) {
-        // Both values are NaN, sort lexicographically
-        return a.localeCompare(b);
-    }
-    if (isNaN(numA)) return 1; // NaN values at the end
-    if (isNaN(numB)) return -1;
-    return numA - numB;
-});
+    tableContainers.forEach(tableContainer => {
+      const table = tableContainer.querySelector('table');
+      const thead = table.querySelector('thead');
 
+      function updateStickyHeader() {
+        const containerRect = tableContainer.getBoundingClientRect();
 
-Tablesort.extend('api-values', function(item) {
-    return true; // Always use this sorter for the column
-}, function(a, b) {
-    function convertValue(value) {
-        value = value.trim().toLowerCase();
-        if (value === 'unlimited') return Infinity;
-        if (value === 'limited') return 1;
-        const number = parseInt(value.replace(/,/g, ''), 10);
-        if (!isNaN(number)) return number;
-        return NaN; // Assign NaN to unparseable values
-    }
-
-    const numA = convertValue(a);
-    const numB = convertValue(b);
-
-    if (isNaN(numA) && isNaN(numB)) {
-        return a.localeCompare(b);
-    }
-    if (isNaN(numA)) return 1;
-    if (isNaN(numB)) return -1;
-    return numA - numB;
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialize Tablesort for each table
-    new Tablesort(document.getElementById('table-1'));
-    new Tablesort(document.getElementById('table-2'));
-    new Tablesort(document.getElementById('table-3'));
-});
-
-Tablesort.extend('price-values', function(item) {
-    return true; // Always use this sorter for the column
-}, function(a, b) {
-    function convertPrice(value) {
-        value = value.trim().toLowerCase();
-        if (value === 'free' || value === 'trial') return 0;
-        const prices = value.match(/[\d.]+/g);
-        if (prices && prices.length > 0) {
-            const total = prices.reduce((sum, p) => sum + parseFloat(p), 0);
-            return total / prices.length;
+        if (containerRect.top <= 0 && containerRect.bottom >= thead.offsetHeight) {
+          thead.style.transform = `translateY(${Math.abs(containerRect.top)}px)`;
+        } else {
+          thead.style.transform = 'translateY(0)';
         }
-        return NaN; // Assign NaN to unparseable values
-    }
+      }
 
-    const numA = convertPrice(a);
-    const numB = convertPrice(b);
+      tableContainer.addEventListener('scroll', updateStickyHeader);
+      window.addEventListener('scroll', updateStickyHeader);
+      window.addEventListener('resize', updateStickyHeader);
 
-    if (isNaN(numA) && isNaN(numB)) {
-        return a.localeCompare(b);
-    }
-    if (isNaN(numA)) return 1;
-    if (isNaN(numB)) return -1;
-    return numA - numB;
-});
-
-
-// Custom function to sort table and keep groups together
-function sortTable(tableId, columnIndex) {
-    const table = document.getElementById(tableId);
-    const tbody = table.querySelector('tbody');
-    const rows = Array.from(tbody.querySelectorAll('tr'));
-
-    // Group rows by data-group attribute
-    const groups = rows.reduce((acc, row) => {
-        const group = row.getAttribute('data-group') || row.rowIndex;
-        if (!acc[group]) acc[group] = [];
-        acc[group].push(row);
-        return acc;
-    }, {});
-
-    // Sort the groups based on the first row's cell in the specified column
-    const sortedGroups = Object.values(groups).sort((a, b) => {
-        const cellA = a[0].cells[columnIndex].innerText.toLowerCase();
-        const cellB = b[0].cells[columnIndex].innerText.toLowerCase();
-        return cellA.localeCompare(cellB);
+      updateStickyHeader();
     });
 
-    // Rebuild the table body with sorted groups
-    tbody.innerHTML = '';
-    sortedGroups.forEach(group => {
-        group.forEach(row => tbody.appendChild(row));
-    });
-}
-</script>    
-            
+    const toggleButton = document.getElementById('toggleColorButton');
+    let isColoringEnabled = false;
+
+    function colorRowsByIndexer() {
+      const rows = document.querySelectorAll('#indexerTable tbody tr');
+      const indexerMap = {};
+
+      rows.forEach(row => {
+        const indexer = row.cells[0].textContent;
+        if (!indexerMap[indexer]) {
+          indexerMap[indexer] = [];
+        }
+        indexerMap[indexer].push(row);
+      });
+
+      Object.keys(indexerMap).forEach((indexer, index) => {
+        const color = isColoringEnabled ? getColor(index) : '';
+        indexerMap[indexer].forEach(row => {
+          row.style.backgroundColor = color;
+        });
+      });
+    }
+
+    function getColor(index) {
+      const colors = ['#42396A', '#4D4866', '#66557B', '#3A2F55', '#5B5171', '#3D4852', '#5B6369', '#40484D', '#535A61', '#66737A', '#3A536B', '#2C3E50', '#495F7E', '#3E4A5A', '#586776', '#52489C', '#77628C', '#6A4C93', '#58427C', '#3E295B', '#2F3E46', '#4A5568', '#6C757D', '#525A65', '#7C848D', '#3C5A72', '#4F6D7A', '#506885', '#394E6A', '#5D737E'];
+      return colors[index % colors.length];
+    }
+
+    function toggleColorGrouping() {
+      isColoringEnabled = !isColoringEnabled;
+      colorRowsByIndexer();
+      updateButtonState();
+    }
+
+    function updateButtonState() {
+      if (isColoringEnabled) {
+        toggleButton.textContent = 'Color Mode: On';
+        toggleButton.classList.add('active');
+      } else {
+        toggleButton.textContent = 'Color Mode: Off';
+        toggleButton.classList.remove('active');
+      }
+    }
+
+    toggleButton.addEventListener('click', toggleColorGrouping);
+
+    colorRowsByIndexer();
+    updateButtonState();
+  });
+  document.getElementById('mobile-menu-button').addEventListener('click', function() {
+    const navbarLinks = document.getElementById('navbar-links');
+    navbarLinks.classList.toggle('hidden');
+  });
+</script>
 </body>
+
 </html>
