@@ -209,8 +209,11 @@
           <button class="w-full sm:w-auto flex-1 px-4 py-2 text-center bg-gray-500 text-gray-300 rounded-md transition duration-300 ease-in-out" onclick="toggleColumn(9)">Toggle Content</button>
         </div>
         
-        <div class="flex flex-wrap gap-4 mb-4">
+       <div class="flex flex-wrap gap-4 mb-4">
           <input id="apiFilter" type="number" placeholder="Min API Requests/Day"
+                 class="flex-1 px-4 py-2 rounded-md bg-gray-700 text-gray-200 border-gray-600 focus:ring-primary focus:border-primary"
+                 oninput="filterTable()">
+          <input id="nzbFilter" type="number" placeholder="Min NZB/Day"
                  class="flex-1 px-4 py-2 rounded-md bg-gray-700 text-gray-200 border-gray-600 focus:ring-primary focus:border-primary"
                  oninput="filterTable()">
           <select id="languageFilter"
@@ -222,9 +225,6 @@
             <option value="ES">Spanish</option>
             <option value="FR">French</option>
           </select>
-          <input id="nzbFilter" type="number" placeholder="Min NZB/Day"
-                 class="flex-1 px-4 py-2 rounded-md bg-gray-700 text-gray-200 border-gray-600 focus:ring-primary focus:border-primary"
-                 oninput="filterTable()">
         </div>
         <div class="flex space-x-4 mb-4">
           <label for="lifetimeFilter" class="flex items-center space-x-2">
@@ -236,6 +236,11 @@
             <input id="cryptoFilter" type="checkbox" class="w-5 h-5 peer hidden" onchange="filterTable()">
             <div class="w-5 h-5 rounded-md bg-gray-700 peer-checked:bg-primary border border-gray-600"></div>
             <span class="text-gray-200">Support Crypto</span>
+          </label>
+          <label for="freeFilter" class="flex items-center space-x-2">
+            <input id="freeFilter" type="checkbox" class="w-5 h-5 peer hidden" onchange="filterTable()">
+            <div class="w-5 h-5 rounded-md bg-gray-700 peer-checked:bg-primary border border-gray-600"></div>
+            <span class="text-gray-200">Free Only</span>
           </label>
         </div>
 
@@ -4362,6 +4367,7 @@
       const nzbInput = document.getElementById('nzbFilter').value;
       const lifetimeToggle = document.getElementById('lifetimeFilter').checked;
       const cryptoToggle = document.getElementById('cryptoFilter').checked;
+      const freeToggle = document.getElementById('freeFilter').checked;
     
       const rows = document.querySelectorAll('#indexerTable tbody tr');
       rows.forEach(row => {
@@ -4370,6 +4376,7 @@
         const languageCell = row.cells[9].textContent.trim().split(',').map(lang => lang.trim().toUpperCase());
         const duration = row.cells[5].textContent.trim().toLowerCase();
         const paymentMethods = row.cells[8].textContent.trim().toLowerCase();
+        const priceCell = row.cells[6].textContent.trim().toLowerCase();
     
         let show = true;
     
@@ -4392,6 +4399,8 @@
         if (lifetimeToggle && !duration.includes('lifetime')) show = false;
     
         if (cryptoToggle && !(/crypto|btc|eth|xmr|ltc/.test(paymentMethods))) show = false;
+    
+        if (freeToggle && priceCell !== 'free') show = false;
     
         row.style.display = show ? '' : 'none';
       });
