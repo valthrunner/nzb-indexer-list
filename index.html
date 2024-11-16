@@ -209,7 +209,7 @@
           <button class="w-full sm:w-auto flex-1 px-4 py-2 text-center bg-gray-500 text-gray-300 rounded-md transition duration-300 ease-in-out" onclick="toggleColumn(9)">Toggle Content</button>
         </div>
         
-       <div class="flex flex-wrap gap-4 mb-4">
+        <div class="flex flex-wrap gap-4 mb-4">
           <input id="apiFilter" type="number" placeholder="Min API Requests/Day"
                  class="w-1/3 px-4 py-2 rounded-md bg-gray-700 text-gray-200 border-gray-600 focus:ring-primary focus:border-primary"
                  oninput="filterTable()">
@@ -222,18 +222,21 @@
             <option value="ES">Spanish</option>
             <option value="FR">French</option>
           </select>
-          <div class="flex space-x-4 w-1/3">
-            <label for="lifetimeFilter" class="flex items-center space-x-2">
-              <input id="lifetimeFilter" type="checkbox" class="w-5 h-5 peer hidden" onchange="filterTable()">
-              <div class="w-5 h-5 rounded-md bg-gray-700 peer-checked:bg-primary border border-gray-600"></div>
-              <span class="text-gray-200">Lifetime Offers</span>
-            </label>
-            <label for="cryptoFilter" class="flex items-center space-x-2">
-              <input id="cryptoFilter" type="checkbox" class="w-5 h-5 peer hidden" onchange="filterTable()">
-              <div class="w-5 h-5 rounded-md bg-gray-700 peer-checked:bg-primary border border-gray-600"></div>
-              <span class="text-gray-200">Support Crypto</span>
-            </label>
-          </div>
+          <input id="nzbFilter" type="number" placeholder="Min NZB/Day"
+                 class="w-1/3 px-4 py-2 rounded-md bg-gray-700 text-gray-200 border-gray-600 focus:ring-primary focus:border-primary"
+                 oninput="filterTable()">
+        </div>
+        <div class="flex space-x-4">
+          <label for="lifetimeFilter" class="flex items-center space-x-2">
+            <input id="lifetimeFilter" type="checkbox" class="w-5 h-5 peer hidden" onchange="filterTable()">
+            <div class="w-5 h-5 rounded-md bg-gray-700 peer-checked:bg-primary border border-gray-600"></div>
+            <span class="text-gray-200">Lifetime Offers</span>
+          </label>
+          <label for="cryptoFilter" class="flex items-center space-x-2">
+            <input id="cryptoFilter" type="checkbox" class="w-5 h-5 peer hidden" onchange="filterTable()">
+            <div class="w-5 h-5 rounded-md bg-gray-700 peer-checked:bg-primary border border-gray-600"></div>
+            <span class="text-gray-200">Support Crypto</span>
+          </label>
         </div>
 
         <div class="table-container bg-gray-800 rounded-lg shadow">
@@ -4356,12 +4359,14 @@
     function filterTable() {
       const apiInput = document.getElementById('apiFilter').value;
       const languageInput = document.getElementById('languageFilter').value.toUpperCase();
+      const nzbInput = document.getElementById('nzbFilter').value;
       const lifetimeToggle = document.getElementById('lifetimeFilter').checked;
       const cryptoToggle = document.getElementById('cryptoFilter').checked;
     
       const rows = document.querySelectorAll('#indexerTable tbody tr');
       rows.forEach(row => {
         const apiRequestsCell = row.cells[3].textContent.trim();
+        const nzbDayCell = row.cells[4].textContent.trim();
         const languageCell = row.cells[9].textContent.trim().split(',').map(lang => lang.trim().toUpperCase());
         const duration = row.cells[5].textContent.trim().toLowerCase();
         const paymentMethods = row.cells[8].textContent.trim().toLowerCase();
@@ -4376,6 +4381,13 @@
         }
     
         if (languageInput && !languageCell.includes(languageInput)) show = false;
+    
+        if (nzbInput) {
+          const nzbDay = nzbDayCell.toLowerCase() === "unlimited" 
+            ? Infinity 
+            : parseInt(nzbDayCell, 10) || 0;
+          if (nzbDay < parseInt(nzbInput, 10)) show = false;
+        }
     
         if (lifetimeToggle && !duration.includes('lifetime')) show = false;
     
