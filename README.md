@@ -1,1 +1,1 @@
-https://hampelmen.github.io/nzb-sources/
+https://valthrunner.github.io/nzb-indexer-list/
