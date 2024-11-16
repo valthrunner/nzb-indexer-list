@@ -4323,38 +4323,6 @@
       updateButtonState();
     }
 
-    function updateButtonState() {
-      if (isColoringEnabled) {
-        toggleButton.textContent = 'Color Mode: On';
-        toggleButton.classList.add('active');
-      } else {
-        toggleButton.textContent = 'Color Mode: Off';
-        toggleButton.classList.remove('active');
-      }
-    }
-
-    function filterTable() {
-      const apiInput = document.getElementById('apiFilter').value;
-      const languageInput = document.getElementById('languageFilter').value;
-      const lifetimeToggle = document.getElementById('lifetimeFilter').checked;
-    
-      const rows = document.querySelectorAll('#indexerTable tbody tr');
-      rows.forEach(row => {
-        const apiRequests = parseInt(row.cells[3].textContent.trim(), 10) || 0;
-        const language = row.cells[9].textContent.trim();
-        const duration = row.cells[5].textContent.trim().toLowerCase();
-    
-        let show = true;
-    
-        if (apiInput && apiRequests < parseInt(apiInput, 10)) show = false;
-        if (languageInput && language !== languageInput) show = false;
-        if (lifetimeToggle && !duration.includes('lifetime')) show = false;
-    
-        row.style.display = show ? '' : 'none';
-      });
-    }
-
-
     toggleButton.addEventListener('click', toggleColorGrouping);
 
     updateLanguage("en");
@@ -4362,6 +4330,28 @@
     colorRowsByIndexer();
     updateButtonState();
   });
+</script>
+<script>
+  function filterTable() {
+    const apiInput = document.getElementById('apiFilter').value;
+    const languageInput = document.getElementById('languageFilter').value;
+    const lifetimeToggle = document.getElementById('lifetimeFilter').checked;
+
+    const rows = document.querySelectorAll('#indexerTable tbody tr');
+    rows.forEach(row => {
+      const apiRequests = parseInt(row.cells[3].textContent.trim(), 10) || 0;
+      const language = row.cells[9].textContent.trim();
+      const duration = row.cells[5].textContent.trim().toLowerCase();
+
+      let show = true;
+
+      if (apiInput && apiRequests < parseInt(apiInput, 10)) show = false;
+      if (languageInput && language !== languageInput) show = false;
+      if (lifetimeToggle && !duration.includes('lifetime')) show = false;
+
+      row.style.display = show ? '' : 'none';
+    });
+  }
 </script>
 </body>
 
