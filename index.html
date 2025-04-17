@@ -4450,7 +4450,7 @@
       rows.forEach(row => {
         const apiRequestsCell = row.cells[3].textContent.trim();
         const nzbDayCell = row.cells[4].textContent.trim();
-        const languageCell = row.cells[9].textContent.trim().split(',').map(lang => lang.trim().toUpperCase());
+        const languageCell = [...row.cells[9].textContent.toUpperCase().matchAll(/\b[A-Z]{2}\b/g)].map(m => m[0]);
         const duration = row.cells[5].textContent.trim().toLowerCase();
         const paymentMethods = row.cells[8].textContent.trim().toLowerCase();
         const priceCell = row.cells[6].textContent.trim().toLowerCase();
